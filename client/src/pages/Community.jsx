@@ -44,7 +44,7 @@ const Community = () => {
                     status: "PENDING",
                     category: "Report",
                     timestamp: new Date().toISOString(),
-                    images: ["https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&q=80&w=800"]
+                    images: ["https://images-assets.nasa.gov/image/PIA23351/PIA23351~orig.jpg"]
                 }
             ];
             setReports(seed);
