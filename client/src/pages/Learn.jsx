@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { BookOpen, Brain, Cpu, Gamepad2, Rocket, RotateCcw, Check, X, Globe } from 'lucide-react';
+import { BookOpen, Brain, Cpu, Gamepad2, Rocket, RotateCcw, Check, X, Globe, Zap, ChevronLeft, ChevronRight } from 'lucide-react';
 import './Learn.css';
 
 const Learn = () => {
-    const [activeTab, setActiveTab] = useState('HUB'); // HUB, QUIZ, GAME, DICT, TECH, PLANET, STAR
+    const [activeTab, setActiveTab] = useState('HUB'); // HUB, QUIZ, GAME, DICT, TECH, PLANET, STAR, SNACKS
 
     return (
         <div className="learn-container">
@@ -14,6 +14,7 @@ const Learn = () => {
             {activeTab === 'TECH' && <TechStories onBack={() => setActiveTab('HUB')} />}
             {activeTab === 'PLANET' && <PlanetExplorer onBack={() => setActiveTab('HUB')} />}
             {activeTab === 'STAR' && <StarExplorer onBack={() => setActiveTab('HUB')} />}
+            {activeTab === 'SNACKS' && <EducationSnacks onBack={() => setActiveTab('HUB')} />}
         </div>
     );
 };
@@ -25,6 +26,11 @@ const LearnHub = ({ setActiveTab }) => (
         <p className="page-subtitle text-center">Explore, Play, and Master the Universe</p>
 
         <div className="hub-grid">
+            <div className="hub-card snacks-card" onClick={() => setActiveTab('SNACKS')}>
+                <Zap size={48} />
+                <h2>Why Should I Care?</h2>
+                <p>20-second micro-learning cards about space impact.</p>
+            </div>
             <div className="hub-card planet-card" onClick={() => setActiveTab('PLANET')}>
                 <Globe size={48} />
                 <h2>Solar System 3D</h2>
@@ -349,8 +355,6 @@ const TechStories = ({ onBack }) => {
     );
 };
 
-export default Learn;
-
 // 6. PLANET EXPLORER (3D CSS)
 const PlanetExplorer = ({ onBack }) => {
     const [selectedPlanet, setSelectedPlanet] = useState(0);
@@ -594,3 +598,235 @@ const StarExplorer = ({ onBack }) => {
         </div>
     );
 };
+
+// 8. EDUCATION SNACKS - "Why Should I Care?"
+const EducationSnacks = ({ onBack }) => {
+    const snacks = [
+        {
+            title: "Why Solar Storms Matter",
+            emoji: "⚡",
+            gradient: "linear-gradient(135deg, #ff6b6b, #ee5a6f)",
+            content: [
+                "Solar storms can knock out GPS, power grids, and satellites.",
+                "In 1989, a solar storm caused a 9-hour blackout in Quebec, Canada.",
+                "Airlines reroute flights to avoid radiation during major storms.",
+                "Your smartphone relies on satellites that are vulnerable to these storms."
+            ],
+            impact: "Real-world impact: Without monitoring, we'd lose communication and navigation systems globally."
+        },
+        {
+            title: "Why Satellites Are Critical for Floods",
+            emoji: "🛰️",
+            gradient: "linear-gradient(135deg, #4facfe, #00f2fe)",
+            content: [
+                "Satellites detect rising water levels before floods hit populated areas.",
+                "They provide real-time data to emergency services for evacuation planning.",
+                "Weather satellites track storm patterns that cause flooding.",
+                "Flood prediction accuracy has improved by 60% thanks to satellite data."
+            ],
+            impact: "Real-world impact: Satellite monitoring saves thousands of lives every year through early warnings."
+        },
+        {
+            title: "Why Asteroids Are Monitored",
+            emoji: "☄️",
+            gradient: "linear-gradient(135deg, #f093fb, #f5576c)",
+            content: [
+                "A 140-meter asteroid could destroy an entire city if it hits Earth.",
+                "NASA tracks over 30,000 near-Earth objects constantly.",
+                "The Chelyabinsk meteor (2013) injured 1,500 people - and we didn't see it coming.",
+                "With enough warning, we could deflect a dangerous asteroid (NASA proved this in 2022)."
+            ],
+            impact: "Real-world impact: Asteroid tracking is literally planetary defense - protecting all life on Earth."
+        },
+        {
+            title: "Why Space Weather Forecasting Exists",
+            emoji: "🌌",
+            gradient: "linear-gradient(135deg, #a8edea, #fed6e3)",
+            content: [
+                "Space weather affects astronauts' radiation exposure on the ISS.",
+                "Solar flares can disrupt radio communications for aircraft.",
+                "Geomagnetic storms interfere with oil pipeline operations.",
+                "Forecasting helps protect $2 trillion worth of space infrastructure."
+            ],
+            impact: "Real-world impact: Space weather forecasting protects critical infrastructure and human lives."
+        },
+        {
+            title: "Why We Study Mars",
+            emoji: "🔴",
+            gradient: "linear-gradient(135deg, #ff9a56, #ff6a88)",
+            content: [
+                "Mars research helps us understand climate change on Earth.",
+                "Technologies developed for Mars rovers improve medical robotics.",
+                "Studying Mars geology reveals how planets form and evolve.",
+                "Mars missions inspire millions to pursue STEM careers."
+            ],
+            impact: "Real-world impact: Mars exploration drives innovation that improves life on Earth today."
+        },
+        {
+            title: "Why Rocket Science Matters to You",
+            emoji: "🚀",
+            gradient: "linear-gradient(135deg, #667eea, #764ba2)",
+            content: [
+                "Rocket fuel research led to better water filtration systems.",
+                "Lightweight materials from spacecraft are now in prosthetic limbs.",
+                "Rocket engine cooling tech is used in modern air conditioning.",
+                "Launch vehicle innovations improve electric car batteries."
+            ],
+            impact: "Real-world impact: Rocket technology innovations touch your daily life in unexpected ways."
+        },
+        {
+            title: "Why the Moon Still Matters",
+            emoji: "🌙",
+            gradient: "linear-gradient(135deg, #e0c3fc, #8ec5fc)",
+            content: [
+                "The Moon stabilizes Earth's tilt, giving us stable seasons.",
+                "Lunar missions test technologies for deep space exploration.",
+                "Moon dust research improves air filtration and construction materials.",
+                "The Moon is a stepping stone for Mars missions and beyond."
+            ],
+            impact: "Real-world impact: The Moon is both a natural stabilizer and a technological testbed for humanity."
+        },
+        {
+            title: "Why Black Holes Aren't Just Sci-Fi",
+            emoji: "🕳️",
+            gradient: "linear-gradient(135deg, #30cfd0, #330867)",
+            content: [
+                "Black hole research tests Einstein's theories in extreme conditions.",
+                "Studying black holes helps us understand galaxy formation.",
+                "The first black hole image (2019) required global telescope collaboration.",
+                "Black hole physics advances quantum computing and encryption."
+            ],
+            impact: "Real-world impact: Black hole research pushes the boundaries of physics and technology."
+        }
+    ];
+
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [completedCards, setCompletedCards] = useState(new Set());
+    const [showCongrats, setShowCongrats] = useState(false);
+
+    const current = snacks[currentIndex];
+    const progress = (completedCards.size / snacks.length) * 100;
+
+    const handleNext = () => {
+        const newCompleted = new Set(completedCards);
+        newCompleted.add(currentIndex);
+        setCompletedCards(newCompleted);
+
+        if (currentIndex < snacks.length - 1) {
+            setCurrentIndex(currentIndex + 1);
+        } else {
+            setShowCongrats(true);
+        }
+    };
+
+    const handlePrev = () => {
+        if (currentIndex > 0) {
+            setCurrentIndex(currentIndex - 1);
+        }
+    };
+
+    const resetSnacks = () => {
+        setCurrentIndex(0);
+        setCompletedCards(new Set());
+        setShowCongrats(false);
+    };
+
+    if (showCongrats) {
+        return (
+            <div className="module-container fade-in">
+                <button className="back-btn" onClick={onBack}>← Back to Hub</button>
+                <div className="snacks-congrats glass-panel text-center">
+                    <div className="congrats-emoji">🎉</div>
+                    <h2>Mission Complete!</h2>
+                    <p>You've explored all {snacks.length} education snacks.</p>
+                    <p className="congrats-message">
+                        You now understand why space science matters to your everyday life!
+                    </p>
+                    <div className="congrats-stats">
+                        <div className="stat-badge">
+                            <span className="stat-number">{snacks.length}</span>
+                            <span className="stat-label">Cards Completed</span>
+                        </div>
+                        <div className="stat-badge">
+                            <span className="stat-number">~{snacks.length * 20}s</span>
+                            <span className="stat-label">Learning Time</span>
+                        </div>
+                    </div>
+                    <button className="action-btn" onClick={resetSnacks}>Review Again</button>
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="module-container fade-in">
+            <button className="back-btn" onClick={onBack}>← Back to Hub</button>
+
+            <div className="snacks-header text-center">
+                <h2>Why Should I Care? 🎯</h2>
+                <p className="snacks-subtitle">Micro-learning in 20 seconds</p>
+                <div className="progress-bar-container">
+                    <div className="progress-bar" style={{ width: `${progress}%` }}></div>
+                </div>
+                <p className="progress-text">{completedCards.size} / {snacks.length} completed</p>
+            </div>
+
+            <div className="snacks-card-container">
+                <div
+                    className="snack-card glass-panel"
+                    style={{ background: current.gradient }}
+                >
+                    <div className="snack-emoji">{current.emoji}</div>
+                    <h3 className="snack-title">{current.title}</h3>
+
+                    <div className="snack-content">
+                        {current.content.map((point, idx) => (
+                            <div key={idx} className="snack-point">
+                                <span className="point-bullet">•</span>
+                                <span className="point-text">{point}</span>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="snack-impact">
+                        <strong>💡 {current.impact}</strong>
+                    </div>
+
+                    <div className="snack-counter">
+                        {currentIndex + 1} / {snacks.length}
+                    </div>
+                </div>
+
+                <div className="snacks-navigation">
+                    <button
+                        className="nav-btn prev-btn"
+                        onClick={handlePrev}
+                        disabled={currentIndex === 0}
+                    >
+                        <ChevronLeft size={24} />
+                        Previous
+                    </button>
+                    <button
+                        className="nav-btn next-btn"
+                        onClick={handleNext}
+                    >
+                        {currentIndex === snacks.length - 1 ? 'Complete' : 'Next'}
+                        <ChevronRight size={24} />
+                    </button>
+                </div>
+
+                <div className="snacks-dots">
+                    {snacks.map((_, idx) => (
+                        <div
+                            key={idx}
+                            className={`dot ${idx === currentIndex ? 'active' : ''} ${completedCards.has(idx) ? 'completed' : ''}`}
+                            onClick={() => setCurrentIndex(idx)}
+                        ></div>
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default Learn;
