@@ -1,22 +1,37 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Sun, Moon, Rocket, Telescope } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
+import AdminLogin from './AdminLogin';
 import './Navbar.css';
 
 const Navbar = () => {
     const { theme, toggleTheme } = useTheme();
+    const [logoClicks, setLogoClicks] = useState(0);
+    const [showAdminLogin, setShowAdminLogin] = useState(false);
+
+    const handleLogoClick = (e) => {
+        if (logoClicks + 1 === 5) {
+            e.preventDefault();
+            setShowAdminLogin(true);
+            setLogoClicks(0);
+        } else {
+            setLogoClicks(prev => prev + 1);
+        }
+    };
 
     return (
         <nav className="navbar glass-panel">
             <div className="navbar-container">
-                <Link to="/" className="navbar-logo">
+                <Link to="/" className="navbar-logo" onClick={handleLogoClick}>
                     <Telescope className="logo-icon text-cyan-400" size={28} />
                     <span className="logo-text">
                         <span className="font-bold tracking-widest text-white">SPACE</span>
                         <span className="font-light tracking-widest text-cyan-400">SCOPE</span>
                     </span>
                 </Link>
+
+                {showAdminLogin && <AdminLogin onClose={() => setShowAdminLogin(false)} />}
 
                 <div className="navbar-links">
                     <Link to="/" className="nav-link">Home</Link>

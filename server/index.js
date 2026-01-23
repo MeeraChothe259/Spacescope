@@ -306,6 +306,52 @@ const server = app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
 
+// Socket.io for SpaceScope Meet (WebRTC Signaling)
+const io = require('socket.io')(server, {
+    cors: {
+        origin: "*",
+        methods: ["GET", "POST"]
+    }
+});
+
+const rooms = {};
+
+io.on('connection', (socket) => {
+    console.log('New connection:', socket.id);
+
+    socket.on('join-room', (roomId) => {
+        socket.join(roomId);
+        console.log(`Socket ${socket.id} joined room ${roomId}`);
+
+        // Notify others in the room
+        socket.to(roomId).emit('user-joined', socket.id);
+    });
+
+    socket.on('offer', ({ target, sdps }) => {
+        socket.to(target).emit('offer', { sender: socket.id, sdps });
+    });
+
+    socket.on('answer', ({ target, sdps }) => {
+        socket.to(target).emit('answer', { sender: socket.id, sdps });
+    });
+
+    socket.on('ice-candidate', ({ target, candidate }) => {
+        socket.to(target).emit('ice-candidate', { sender: socket.id, candidate });
+    });
+
+    socket.on('disconnecting', () => {
+        for (const room of socket.rooms) {
+            if (room !== socket.id) {
+                socket.to(room).emit('user-left', socket.id);
+            }
+        }
+    });
+
+    socket.on('disconnect', () => {
+        console.log('User disconnected:', socket.id);
+    });
+});
+
 // Explicit error handling for the server
 server.on('error', (error) => {
     if (error.code === 'EADDRINUSE') {

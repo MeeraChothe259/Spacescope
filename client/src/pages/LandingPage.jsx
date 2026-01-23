@@ -10,6 +10,7 @@ const LandingPage = () => {
     const [scrollY, setScrollY] = useState(0);
 
     useEffect(() => {
+        console.log("🏙️ LandingPage: Rendering Mission Overview Section");
         const handleScroll = () => setScrollY(window.scrollY);
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);

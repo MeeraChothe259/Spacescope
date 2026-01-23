@@ -230,7 +230,7 @@ const SolarSystem = () => {
             <ambientLight intensity={0.25} />
             <Stars radius={300} depth={60} count={30000} factor={8} saturation={0} fade speed={0.5} />
 
-            <React.Suspense fallback={null}>
+            <React.Suspense fallback={<group><mesh><sphereGeometry args={[1, 32, 32]} /><meshBasicMaterial color="white" wireframe /></mesh></group>}>
                 <Sun />
 
                 <Planet position={[4, 0, 0]} size={0.3} textureUrl={TEXTURES.mercury} speed={0.8} orbitRadius={5} />

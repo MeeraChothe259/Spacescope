@@ -56,11 +56,18 @@ const Dashboard = () => {
                     <div className="summary-status text-cyan-400">Orbital Telemetry</div>
                     <a href="/cosmic-timeline" className="view-details-link">Travel in Time →</a>
                 </div>
+
                 <div className="glass-panel widget weather-summary-widget">
                     <h3>Crew Quarters</h3>
                     <div className="summary-status text-orange-400">Join the Mission</div>
                     <a href="/community" className="view-details-link">Community Hub →</a>
                 </div>
+                {/* Hidden until Admin Login */}
+                {/* <div className="glass-panel widget weather-summary-widget" style={{ borderColor: '#60a5fa', boxShadow: '0 0 10px rgba(96, 165, 250, 0.1)' }}>
+                    <h3>Instructor Verification</h3>
+                    <div className="summary-status text-blue-400">1 Pending Review</div>
+                    <a href="/instructor-verification" className="view-details-link">Review Applicant →</a>
+                </div> */}
             </div>
         </div>
     );
