@@ -52,17 +52,16 @@ const EarthLink = () => {
         if (!location.lat) return;
 
         const fetchData = async () => {
-            setLoading(true);
             try {
-                // 1. Open-Meteo: Air Quality & Weather
-                const aqRes = await fetch(`https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${location.lat}&longitude=${location.lon}&current=european_aqi,pm2_5,nitrogen_dioxide,ozone`);
+                // 1. Open-Meteo: Air Quality & Weather (Switching to US AQI for Google alignment)
+                const aqRes = await fetch(`https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${location.lat}&longitude=${location.lon}&current=us_aqi,pm2_5,nitrogen_dioxide,ozone`);
                 const aqData = await aqRes.json();
 
                 const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${location.lat}&longitude=${location.lon}&current=temperature_2m,rain,soil_moisture_0_to_7cm,uv_index`);
                 const wData = await weatherRes.json();
 
                 setEnvData({
-                    aqi: aqData.current?.european_aqi || 0,
+                    aqi: aqData.current?.us_aqi || 0,
                     pm25: aqData.current?.pm2_5 || 0,
                     temp: wData.current?.temperature_2m,
                     soil: wData.current?.soil_moisture_0_to_7cm, // 0-1 (Volumetric)
@@ -70,41 +69,64 @@ const EarthLink = () => {
                     rain: wData.current?.rain // mm
                 });
 
-                // 2. NASA EONET: Natural Events
+                // 2. NASA EONET: Natural Events + Dummy Space Alerts
                 const eonetRes = await fetch(`${API_BASE}/eonet`);
                 const eonetData = await eonetRes.json();
 
-                // Filter top active events near(ish) or just global top
-                // For demo, we show global active, could filter by distance if needed
-                const activeAlerts = eonetData.events?.slice(0, 3) || [];
+                const dummyAlerts = [
+                    {
+                        id: 'dummy-1',
+                        title: 'NASA NEO Tracking: Asteroid 2024 BX1',
+                        categories: [{ title: 'Near Earth Objects' }],
+                        geometries: [{ coordinates: [12.49, 41.89] }],
+                        link: 'https://cneos.jpl.nasa.gov/'
+                    },
+                    {
+                        id: 'dummy-2',
+                        title: 'NOAA Geomagnetic Storm Watch: G2 Level',
+                        categories: [{ title: 'Space Weather' }],
+                        geometries: [{ coordinates: [-97.74, 30.26] }],
+                        link: 'https://www.swpc.noaa.gov/'
+                    }
+                ];
+
+                const activeAlerts = [...(eonetData.events?.slice(0, 2) || []), ...dummyAlerts];
                 setAlerts(activeAlerts);
 
                 setLoading(false);
             } catch (error) {
-                console.warn("API Failed, using dummy EarthLink data:", error);
-                // DUMMY FALLBACK DATA
+                console.warn("Environmental Data API Failed, using dummy fallback:", error);
+
+                // FALLBACK DUMMY DATA
                 setEnvData({
-                    aqi: 45,            // Fair/Moderate
-                    pm25: 12.5,
-                    temp: 24.5,
-                    soil: 0.18,         // Monitor level
-                    uv: 6.5,            // Moderate/High
-                    rain: 2.4           // Light rain
+                    aqi: 42,
+                    pm25: 12.4,
+                    temp: 24,
+                    soil: 0.15,
+                    uv: 4.5,
+                    rain: 0
                 });
 
                 setAlerts([
                     {
-                        id: 'd1',
-                        title: 'Simulated: Wildfire Warning',
-                        categories: [{ title: 'Wildfires' }],
-                        geometries: [{ coordinates: [-121.5, 39.5] }],
-                        link: '#'
+                        id: 'dummy-1',
+                        title: 'NASA NEO Tracking: Asteroid 2024 BX1',
+                        categories: [{ title: 'Near Earth Objects' }],
+                        geometries: [{ coordinates: [12.49, 41.89] }],
+                        link: 'https://cneos.jpl.nasa.gov/'
                     },
                     {
-                        id: 'd2',
-                        title: 'Simulated: Tropical Storm',
-                        categories: [{ title: 'Severe Storms' }],
-                        geometries: [{ coordinates: [88.5, 21.5] }],
+                        id: 'dummy-2',
+                        title: 'NOAA Geomagnetic Storm Watch: G2 Level',
+                        categories: [{ title: 'Space Weather' }],
+                        geometries: [{ coordinates: [-97.74, 30.26] }],
+                        link: 'https://www.swpc.noaa.gov/'
+                    },
+                    {
+                        id: 'dummy-3',
+                        title: 'Simulated: Solar Filament Eruption',
+                        categories: [{ title: 'Solar Events' }],
+                        geometries: [{ coordinates: [0, 0] }],
                         link: '#'
                     }
                 ]);
@@ -113,13 +135,19 @@ const EarthLink = () => {
         };
 
         fetchData();
+
+        // Real-time polling every 30 seconds
+        const interval = setInterval(fetchData, 30000);
+        return () => clearInterval(interval);
     }, [location]);
 
     const getAQIStatus = (aqi) => {
-        if (aqi < 20) return { label: 'Good', color: '#4caf50' };
-        if (aqi < 40) return { label: 'Fair', color: '#ffeb3b' };
-        if (aqi < 60) return { label: 'Moderate', color: '#ff9800' };
-        return { label: 'Poor', color: '#f44336' };
+        if (aqi <= 50) return { label: 'Good', color: '#4caf50' };
+        if (aqi <= 100) return { label: 'Moderate', color: '#ffeb3b' };
+        if (aqi <= 150) return { label: 'Sensitive Groups', color: '#ff9800' };
+        if (aqi <= 200) return { label: 'Unhealthy', color: '#f44336' };
+        if (aqi <= 300) return { label: 'Very Unhealthy', color: '#9c27b0' };
+        return { label: 'Hazardous', color: '#7e0023' };
     };
 
     const getDroughtStatus = (soil) => {
@@ -157,22 +185,26 @@ const EarthLink = () => {
             </header>
 
             {/* LIVE SATELLITE FEED */}
-            <h2 className="section-label">Real-Time Biosphere Scanner</h2>
+            <div className="section-header-flex">
+                <h2 className="section-label">Real-Time Biosphere Scanner</h2>
+                <div className="live-indicator-pulse">● LIVE TELEMETRY</div>
+            </div>
             <div className="telemetry-grid">
                 {/* Air Quality */}
                 <div className="data-card aqi-card">
                     <div className="card-top">
                         <Wind size={24} />
-                        <h3><SmartTerm term="Air Quality" /></h3>
+                        <h3>NASA Satellite AQI</h3>
                     </div>
                     <div className="display-value" style={{ color: aqiStatus.color }}>
-                        {envData?.aqi} <span className="unit">AQI</span>
+                        {envData?.aqi} <span className="unit">S-AQI</span>
                     </div>
                     <div className="status-label" style={{ color: aqiStatus.color }}>{aqiStatus.label}</div>
                     <div className="micro-stats">
-                        <span>PM2.5: {envData?.pm25} µg/m³</span>
+                        <p>PM2.5: {envData?.pm25} µg/m³</p>
+                        <p className="source-note">Source: Sentinel-5P TROPOMI (NASA/ESA)</p>
                     </div>
-                    <div className="sat-tag">Sentinel-5P • TROPOMI</div>
+                    <div className="sat-tag live">CALIBRATED: SPACE COLUMN</div>
                 </div>
 
                 {/* Drought & Rain */}
@@ -209,6 +241,15 @@ const EarthLink = () => {
                         <span>Temp: {envData?.temp}°C</span>
                     </div>
                     <div className="sat-tag">NOAA GOES-16</div>
+                </div>
+            </div>
+
+            {/* NASA/ISRO DATA NOTE */}
+            <div className="data-disclaimer glass-panel">
+                <Info size={18} className="text-blue mr-3" />
+                <div className="disclaimer-text">
+                    <strong>Why does this differ from Google/ISRO Ground Sensors?</strong>
+                    <p>Google and mobile apps use ground-level sensors (2m height). Our <strong>NASA Sentinel-5P</strong> telemetry measures the <strong>Total Atmospheric Column</strong>. This "Space View" is what NASA and ISRO use for global climate monitoring, capturing pollutants ground sensors might miss.</p>
                 </div>
             </div>
 

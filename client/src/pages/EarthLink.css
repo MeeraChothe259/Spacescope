@@ -18,6 +18,7 @@
 .text-gradient {
     background: linear-gradient(90deg, #4caf50, #00e5ff);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
@@ -84,9 +85,35 @@
     text-transform: uppercase;
     color: var(--text-secondary);
     letter-spacing: 0.1em;
-    margin-bottom: 1rem;
     padding-left: 0.5rem;
     border-left: 3px solid var(--accent-primary);
+}
+
+.section-header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.live-indicator-pulse {
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: #ff4444;
+    letter-spacing: 1px;
+    animation: pulse-red 1.5s infinite alternate;
+}
+
+@keyframes pulse-red {
+    from {
+        opacity: 0.4;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 /* TELEMETRY GRID */
@@ -179,6 +206,29 @@
 /* DISASTER SECTION */
 .disaster-section {
     margin-bottom: 4rem;
+}
+
+.data-disclaimer {
+    display: flex;
+    align-items: flex-start;
+    padding: 1.5rem;
+    margin-bottom: 4rem;
+    border: 1px solid rgba(0, 229, 255, 0.2);
+    border-left: 4px solid #00e5ff;
+}
+
+.disclaimer-text strong {
+    display: block;
+    color: #00e5ff;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.disclaimer-text p {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin: 0;
 }
 
 .section-title {
