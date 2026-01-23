@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Wind, Sun, Droplets, AlertTriangle, MapPin, Globe, Shield, CloudRain, Search, Navigation } from 'lucide-react';
+import SmartTerm from '../components/SmartTerm';
 import './EarthLink.css';
 
 const EarthLink = () => {
@@ -136,7 +137,7 @@ const EarthLink = () => {
         <div className="earth-link-container fade-in">
             <header className="earth-header text-center">
                 <h1 className="hero-title"><span className="text-gradient">EarthLink</span> Impact Engine</h1>
-                <p className="hero-subtitle">Satellite Intelligence for <span className="text-white font-bold">{location.city}</span></p>
+                <p className="hero-subtitle"><SmartTerm term="Satellite" display="Satellite Intelligence" /> for <span className="text-white font-bold">{location.city}</span></p>
 
                 <form onSubmit={handleSearch} className="search-bar">
                     <input
@@ -156,7 +157,7 @@ const EarthLink = () => {
                 <div className="data-card aqi-card">
                     <div className="card-top">
                         <Wind size={24} />
-                        <h3>Air Quality</h3>
+                        <h3><SmartTerm term="Air Quality" /></h3>
                     </div>
                     <div className="display-value" style={{ color: aqiStatus.color }}>
                         {envData?.aqi} <span className="unit">AQI</span>
@@ -190,7 +191,7 @@ const EarthLink = () => {
                 <div className="data-card uv-card">
                     <div className="card-top">
                         <Sun size={24} />
-                        <h3>Solar Impact</h3>
+                        <h3><SmartTerm term="UV Index" display="Solar Impact" /></h3>
                     </div>
                     <div className="display-value text-orange">
                         {envData?.uv} <span className="unit">UV</span>
@@ -243,21 +244,21 @@ const EarthLink = () => {
                             <CloudRain size={48} />
                         </div>
                         <h3>Flood Prediction</h3>
-                        <p>Satellites like <strong>Sentinel-1</strong> use radar to see through clouds, mapping floodwaters in real-time to guide rescue teams.</p>
+                        <p><SmartTerm term="Satellite" display="Satellites" /> like <strong><SmartTerm term="Sentinel" display="Sentinel-1" /></strong> use radar to see through clouds, mapping floodwaters in real-time to guide rescue teams.</p>
                     </div>
                     <div className="story-card glass-panel">
                         <div className="story-img fire-img">
                             <Sun size={48} />
                         </div>
                         <h3>Wildfire Tracking</h3>
-                        <p>Infrared sensors on <strong>MODIS</strong> detect heat anomalies, alerting firefighters to new blazes minutes after they start.</p>
+                        <p>Infrared sensors on <strong><SmartTerm term="MODIS" /></strong> detect heat anomalies, alerting firefighters to new blazes minutes after they start.</p>
                     </div>
                     <div className="story-card glass-panel">
                         <div className="story-img crop-img">
                             <Droplets size={48} />
                         </div>
-                        <h3>Precision Farming</h3>
-                        <p><strong>Landsat</strong> data monitors crop health and soil moisture, helping farmers save water and increase global food security.</p>
+                        <h3><SmartTerm term="Precision Farming" /></h3>
+                        <p><strong><SmartTerm term="Landsat" /></strong> data monitors crop health and soil moisture, helping farmers save water and increase global food security.</p>
                     </div>
                 </div>
             </section>

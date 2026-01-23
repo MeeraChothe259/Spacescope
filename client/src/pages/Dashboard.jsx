@@ -1,4 +1,5 @@
 import React from 'react';
+import SmartTerm from '../components/SmartTerm';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -9,7 +10,7 @@ const Dashboard = () => {
             {/* Placeholder for future widgets */}
             <div className="dashboard-grid">
                 <div className="glass-panel widget weather-summary-widget">
-                    <h3>Space Weather</h3>
+                    <h3><SmartTerm term="Space Weather" /></h3>
                     <div className="summary-status text-green-400">Loading...</div>
                     <a href="/cosmic-weather" className="view-details-link">View Full Report →</a>
                 </div>

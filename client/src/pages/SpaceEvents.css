@@ -17,7 +17,7 @@
     flex-direction: column;
     gap: 1rem;
     position: relative;
-    overflow: hidden;
+    /* overflow: hidden; Removed to allow tooltips to show */
 }
 
 .iss-map-placeholder {

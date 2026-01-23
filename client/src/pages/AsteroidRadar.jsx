@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Radar, AlertTriangle, Shield, Activity, Database, Scale, Info } from 'lucide-react';
+import SmartTerm from '../components/SmartTerm';
 import './AsteroidRadar.css';
 
 const AsteroidRadar = () => {
@@ -136,7 +137,7 @@ const AsteroidRadar = () => {
 
     return (
         <div className="asteroid-radar-container">
-            <h1 className="page-title glow-text">Near-Earth Object Radar</h1>
+            <h1 className="page-title glow-text"><SmartTerm term="NEO" display="Near-Earth Object" /> Radar</h1>
 
             <div className="radar-grid">
 
@@ -199,7 +200,7 @@ const AsteroidRadar = () => {
                                 {selectedAsteroid.name.replace(/[()]/g, '')}
                             </h2>
                             <div className="detail-row">
-                                <span className="label">Hazard Status</span>
+                                <span className="label"><SmartTerm term="Hazardous" display="Hazard Status" /></span>
                                 <span className={`value badge ${selectedAsteroid.is_potentially_hazardous_asteroid ? 'bg-red-900 text-red-100' : 'bg-green-900 text-green-100'}`}>
                                     {selectedAsteroid.is_potentially_hazardous_asteroid ? 'POTENTIALLY HAZARDOUS' : 'SAFE'}
                                 </span>
@@ -217,7 +218,7 @@ const AsteroidRadar = () => {
                                 <div className="detail-item">
                                     <Activity size={18} className="text-gray-400" />
                                     <div>
-                                        <div className="label">Velocity</div>
+                                        <div className="label"><SmartTerm term="Velocity" /></div>
                                         <div className="value">
                                             {parseFloat(selectedAsteroid.close_approach_data[0].relative_velocity.kilometers_per_hour).toLocaleString()} km/h
                                         </div>
@@ -226,7 +227,7 @@ const AsteroidRadar = () => {
                                 <div className="detail-item">
                                     <Shield size={18} className="text-gray-400" />
                                     <div>
-                                        <div className="label">Miss Distance</div>
+                                        <div className="label"><SmartTerm term="Miss Distance" /></div>
                                         <div className="value">
                                             {parseFloat(selectedAsteroid.close_approach_data[0].miss_distance.kilometers).toLocaleString()} km
                                         </div>
@@ -280,7 +281,7 @@ const AsteroidRadar = () => {
                         <span className="stat-val">{stats.total}</span>
                     </div>
                     <div className="stat-row">
-                        <span>Hazardous</span>
+                        <span><SmartTerm term="Hazardous" /></span>
                         <span className={`stat-val ${stats.hazardous > 0 ? 'text-red-500' : 'text-green-400'}`}>{stats.hazardous}</span>
                     </div>
                     <div className="stat-row">

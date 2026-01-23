@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './CosmicWeather.css';
 import { Wind, Activity, Zap, Radio, AlertTriangle, ShieldAlert } from 'lucide-react';
+import SmartTerm from '../components/SmartTerm';
 
 const CosmicWeather = () => {
     const [solarWind, setSolarWind] = useState(null);
@@ -125,7 +126,7 @@ const CosmicWeather = () => {
                 <div className="glass-panel weather-card">
                     <div className="card-header">
                         <Wind className="card-icon" />
-                        <h3>Solar Wind Speed</h3>
+                        <h3><SmartTerm term="Solar Wind" display="Solar Wind Speed" /></h3>
                     </div>
                     <div className="card-value">
                         {solarWind?.speed ? Math.round(solarWind.speed) : '--'} <span className="unit">km/s</span>
@@ -137,7 +138,7 @@ const CosmicWeather = () => {
                 <div className="glass-panel weather-card">
                     <div className="card-header">
                         <Activity className="card-icon" />
-                        <h3>Solar Density</h3>
+                        <h3><SmartTerm term="Solar Density" /></h3>
                     </div>
                     <div className="card-value">
                         {solarWind?.density ? parseFloat(solarWind.density).toFixed(1) : '--'} <span className="unit">p/cm³</span>
@@ -149,7 +150,7 @@ const CosmicWeather = () => {
                 <div className="glass-panel weather-card">
                     <div className="card-header">
                         <Zap className="card-icon" />
-                        <h3>Magnetic Field (Bz)</h3>
+                        <h3><SmartTerm term="Magnetic Field" /> (<SmartTerm term="Bz" />)</h3>
                     </div>
                     <div className={`card-value ${magField?.bz_gsm < 0 ? 'text-red-400' : 'text-green-400'}`}>
                         {magField?.bz_gsm ? parseFloat(magField.bz_gsm).toFixed(1) : '--'} <span className="unit">nT</span>
@@ -161,7 +162,7 @@ const CosmicWeather = () => {
                 <div className="glass-panel weather-card">
                     <div className="card-header">
                         <Radio className="card-icon" />
-                        <h3>Geomagnetic K-Index</h3>
+                        <h3><SmartTerm term="K-Index" display="Geomagnetic K-Index" /></h3>
                     </div>
                     <div className={`card-value ${kStatus.color}`}>
                         {kIndex?.kp_index || '--'}
@@ -176,7 +177,7 @@ const CosmicWeather = () => {
                 <div className="glass-panel weather-card">
                     <div className="card-header">
                         <ShieldAlert className="card-icon" />
-                        <h3>Proton Flux</h3>
+                        <h3><SmartTerm term="Proton Flux" /></h3>
                     </div>
                     <div className="card-value">
                         {protonFlux?.flux ? parseFloat(protonFlux.flux).toExponential(1) : '--'}
@@ -188,7 +189,7 @@ const CosmicWeather = () => {
                 <div className="glass-panel weather-card wide-card">
                     <div className="card-header">
                         <AlertTriangle className="card-icon" />
-                        <h3>Recent Solar Flares</h3>
+                        <h3>Recent <SmartTerm term="Solar Flare" display="Solar Flares" /></h3>
                     </div>
                     <div className="flares-list">
                         {flares.length > 0 ? flares.map((flare, idx) => (
@@ -259,7 +260,7 @@ const ImpactMeter = ({ kIndex }) => {
                     <span className="impact-val">{impact.grid}</span>
                 </div>
                 <div className="impact-item">
-                    <span className="impact-label">Aurora Borealis</span>
+                    <span className="impact-label"><SmartTerm term="Aurora" display="Aurora Borealis" /></span>
                     <span className="impact-val">{impact.aurora}</span>
                 </div>
             </div>

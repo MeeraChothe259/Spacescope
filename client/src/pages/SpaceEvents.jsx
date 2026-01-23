@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import SunCalc from 'suncalc';
 import * as Astronomy from 'astronomy-engine';
 import { Plane, Star, Sun as SunIcon, Moon, MapPin, Watch, Eye, Globe, AlertOctagon, Lightbulb } from 'lucide-react';
+import SmartTerm from '../components/SmartTerm';
 import './SpaceEvents.css';
 
 const SpaceEvents = () => {
@@ -191,7 +192,7 @@ const SpaceEvents = () => {
                 <div className="glass-panel event-card iss-card">
                     <div className="card-header">
                         <Plane className="card-icon" style={{ transform: 'rotate(-45deg)' }} />
-                        <h3>ISS Live Tracker</h3>
+                        <h3><SmartTerm term="ISS" display="ISS Live Tracker" /></h3>
                     </div>
                     <div className="iss-map-placeholder">
                         <div className="earth-visual"></div>
@@ -215,16 +216,16 @@ const SpaceEvents = () => {
                     </div>
                     <div className="astro-stats">
                         <div className="astro-row">
-                            <span>Sunrise</span>
+                            <span><SmartTerm term="Sunrise" /></span>
                             <span>{formatTime(astronomy?.sunrise)}</span>
                         </div>
                         <div className="astro-row">
-                            <span>Sunset</span>
+                            <span><SmartTerm term="Sunset" /></span>
                             <span>{formatTime(astronomy?.sunset)}</span>
                         </div>
                         <div className="astro-divider"></div>
                         <div className="astro-row">
-                            <span>Moon Phase</span>
+                            <span><SmartTerm term="Moon Phase" /></span>
                             <div className="moon-visual">
                                 <Moon size={16} fill={astronomy?.moonFraction > 0.5 ? 'currentColor' : 'none'} />
                                 <span>{getMoonPhaseName(astronomy?.moonPhase)}</span>
@@ -237,7 +238,7 @@ const SpaceEvents = () => {
                 <div className="glass-panel event-card wide-card">
                     <div className="card-header">
                         <Star className="card-icon" />
-                        <h3>Active Meteor Showers</h3>
+                        <h3>Active <SmartTerm term="Meteor Shower" display="Meteor Showers" /></h3>
                     </div>
                     <div className="meteors-list">
                         {meteors.length > 0 ? meteors.map((shower, idx) => (
@@ -270,13 +271,13 @@ const SpaceEvents = () => {
                 <div className="glass-panel event-card">
                     <div className="card-header">
                         <Globe className="card-icon" />
-                        <h3>Visible Planets</h3>
+                        <h3><SmartTerm term="Planet" display="Visible Planets" /></h3>
                     </div>
                     <div className="planets-list">
                         {planets.length > 0 ? planets.map((p, idx) => (
                             <div key={idx} className="planet-item">
                                 <span className="planet-name">{p.name}</span>
-                                <span className="planet-pos">Alt: {p.altitude.toFixed(1)}°</span>
+                                <span className="planet-pos"><SmartTerm term="Altitude" display="Alt" />: {p.altitude.toFixed(1)}°</span>
                             </div>
                         )) : <p>No planets currently above the horizon.</p>}
                     </div>
@@ -292,7 +293,7 @@ const SpaceEvents = () => {
                     <div className="forecast-display">
                         <div className={`score-circle ${weather.score >= 80 ? 'good' : weather.score >= 50 ? 'fair' : 'poor'}`}>
                             <span className="score-val">{weather.score}</span>
-                            <span className="score-label">Visibility</span>
+                            <span className="score-label"><SmartTerm term="Visibility" /></span>
                         </div>
                         <div className="forecast-details">
                             <div className="f-row">
@@ -300,7 +301,7 @@ const SpaceEvents = () => {
                                 <span className="highlight">{weather.condition}</span>
                             </div>
                             <div className="f-row">
-                                <span>Cloud Cover:</span>
+                                <span><SmartTerm term="Cloud Cover" />:</span>
                                 <span>{weather.cloudCover}%</span>
                             </div>
                             <div className="f-row">
@@ -328,7 +329,7 @@ const SpaceEvents = () => {
                             </p>
                         </div>
                         <div className="tip-box">
-                            <h4>Solar Activity</h4>
+                            <h4><SmartTerm term="Solar Flare" display="Solar Activity" /></h4>
                             {solarFlareAlert ? (
                                 <div className="text-red-500 flex items-center gap-2">
                                     <AlertOctagon size={16} />
