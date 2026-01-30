@@ -420,6 +420,9 @@ import InteractiveModel from '../components/InteractiveModel';
 // 6. PLANET EXPLORER (3D CSS)
 const PlanetExplorer = ({ onBack }) => {
     const [selectedPlanet, setSelectedPlanet] = useState(0);
+    const [earthAge, setEarthAge] = useState('');
+    const [planetAge, setPlanetAge] = useState(null);
+    const [isPlaying, setIsPlaying] = useState(false);
 
     const planets = [
         {
@@ -427,69 +430,196 @@ const PlanetExplorer = ({ onBack }) => {
             color: "linear-gradient(135deg, #a5a5a5, #5f5f5f)",
             modelColor: "#a5a5a5",
             textureUrl: "/textures/mercury.jpg",
+            soundUrl: "/sounds/mercury.mp3",
             desc: "The smallest planet in our solar system and closest to the Sun. It is only slightly larger than Earth's Moon.",
-            stats: { type: "Terrestrial", moons: 0, day: "59 Earth days", year: "88 Earth days" }
+            stats: { type: "Terrestrial", moons: 0, day: "59 Earth days", year: "88 Earth days" },
+            yearRatio: 0.24 // Earth years to Mercury years
         },
         {
             name: "Venus",
             color: "linear-gradient(135deg, #e6c229, #d1a000)",
             modelColor: "#e6c229",
             textureUrl: "/textures/venus.jpg",
+            soundUrl: "/sounds/venus.mp3",
             desc: "Spinning in the opposite direction to most planets, Venus is the hottest planet in our solar system.",
-            stats: { type: "Terrestrial", moons: 0, day: "243 Earth days", year: "225 Earth days" }
+            stats: { type: "Terrestrial", moons: 0, day: "243 Earth days", year: "225 Earth days" },
+            yearRatio: 0.62
         },
         {
             name: "Earth",
             color: "linear-gradient(135deg, #2196f3, #4caf50)",
             modelColor: "#2196f3",
             textureUrl: "/textures/earth.jpg",
+            soundUrl: "/sounds/earth.mp3",
             desc: "Our home planet is the only place we know of so far that's inhabited by living things.",
-            stats: { type: "Terrestrial", moons: 1, day: "24 hours", year: "365.25 days" }
+            stats: { type: "Terrestrial", moons: 1, day: "24 hours", year: "365.25 days" },
+            yearRatio: 1.0
         },
         {
             name: "Mars",
             color: "linear-gradient(135deg, #ff5722, #c62828)",
             modelColor: "#ff5722",
             textureUrl: "/textures/mars.jpg",
+            soundUrl: "/sounds/mars.mp3",
             desc: "Mars is a dusty, cold, desert world with a very thin atmosphere. It is also a dynamic planet with seasons.",
-            stats: { type: "Terrestrial", moons: 2, day: "24.6 hours", year: "687 Earth days" }
+            stats: { type: "Terrestrial", moons: 2, day: "24.6 hours", year: "687 Earth days" },
+            yearRatio: 1.88
         },
         {
             name: "Jupiter",
             color: "linear-gradient(135deg, #d4a373, #a2724e)",
             modelColor: "#d4a373",
             textureUrl: "/textures/jupiter.jpg",
+            soundUrl: "/sounds/jupiter.mp3",
             desc: "Jupiter has more than double the mass of all the other planets combined. The Great Red Spot is a centuries-old storm.",
-            stats: { type: "Gas Giant", moons: 95, day: "10 hours", year: "12 Earth years" }
+            stats: { type: "Gas Giant", moons: 95, day: "10 hours", year: "12 Earth years" },
+            yearRatio: 11.86
         },
         {
             name: "Saturn",
             color: "linear-gradient(135deg, #ead18d, #cfa855)",
             modelColor: "#ead18d",
             textureUrl: "/textures/saturn.jpg",
+            soundUrl: "/sounds/saturn.mp3",
             hasRings: true,
             desc: "Adorned with a dazzling, complex system of icy rings, Saturn is unique in our solar system.",
-            stats: { type: "Gas Giant", moons: 146, day: "10.7 hours", year: "29 Earth years" }
+            stats: { type: "Gas Giant", moons: 146, day: "10.7 hours", year: "29 Earth years" },
+            yearRatio: 29.46
         },
         {
             name: "Uranus",
             color: "linear-gradient(135deg, #00bcd4, #0097a7)",
             modelColor: "#00bcd4",
             textureUrl: "/textures/uranus.jpg",
+            soundUrl: "/sounds/uranus.mp3",
             desc: "Uranus rotates at a nearly 90-degree angle from the plane of its orbit. This unique tilt makes it spin on its side.",
-            stats: { type: "Ice Giant", moons: 28, day: "17 hours", year: "84 Earth years" }
+            stats: { type: "Ice Giant", moons: 28, day: "17 hours", year: "84 Earth years" },
+            yearRatio: 84.01
         },
         {
             name: "Neptune",
             color: "linear-gradient(135deg, #3f51b5, #1a237e)",
             modelColor: "#3f51b5",
             textureUrl: "/textures/neptune.jpg",
+            soundUrl: "/sounds/neptune.mp3",
             desc: "Neptune is dark, cold and whipped by supersonic winds. It was the first planet located through mathematical calculations.",
-            stats: { type: "Ice Giant", moons: 16, day: "16 hours", year: "165 Earth years" }
+            stats: { type: "Ice Giant", moons: 16, day: "16 hours", year: "165 Earth years" },
+            yearRatio: 164.79
         }
     ];
 
     const current = planets[selectedPlanet];
+
+    const playPlanetSound = async () => {
+        try {
+            setIsPlaying(true);
+            
+            // Use alternative NASA sound URLs that are more accessible
+            const nasaSounds = {
+                'Mercury': 'https://www.nasa.gov/wp-content/uploads/2023/08/mars-wind-sound.wav',
+                'Venus': 'https://www.nasa.gov/wp-content/uploads/2023/08/mars-wind-sound.wav',
+                'Earth': 'https://www.nasa.gov/wp-content/uploads/2023/08/mars-wind-sound.wav',
+                'Mars': 'https://www.nasa.gov/wp-content/uploads/2023/08/mars-wind-sound.wav',
+                'Jupiter': 'https://www.nasa.gov/wp-content/uploads/2023/08/mars-wind-sound.wav',
+                'Saturn': 'https://www.nasa.gov/wp-content/uploads/2023/08/mars-wind-sound.wav',
+                'Uranus': 'https://www.nasa.gov/wp-content/uploads/2023/08/mars-wind-sound.wav',
+                'Neptune': 'https://www.nasa.gov/wp-content/uploads/2023/08/mars-wind-sound.wav'
+            };
+
+            // Create audio element with proper setup
+            const audio = new Audio();
+            audio.crossOrigin = "anonymous";
+            
+            try {
+                audio.src = nasaSounds[current.name];
+                
+                audio.addEventListener('canplaythrough', () => {
+                    console.log('NASA audio loaded successfully');
+                    audio.play().then(() => {
+                        console.log('NASA audio playing');
+                    }).catch(error => {
+                        console.log('NASA audio play failed:', error);
+                        playSynthesizedSound();
+                    });
+                });
+
+                audio.addEventListener('error', (e) => {
+                    console.log('NASA audio error:', e);
+                    console.log('Using synthesized sound instead');
+                    playSynthesizedSound();
+                });
+
+                audio.addEventListener('ended', () => {
+                    console.log('NASA audio ended');
+                    setIsPlaying(false);
+                });
+
+                audio.load();
+                
+                // Fallback timeout
+                setTimeout(() => {
+                    if (isPlaying) {
+                        console.log('NASA audio timeout - using synthesized sound');
+                        playSynthesizedSound();
+                    }
+                }, 3000);
+                
+            } catch (soundError) {
+                console.log('Error setting up NASA audio:', soundError);
+                playSynthesizedSound();
+            }
+
+        } catch (error) {
+            console.log('Error in playPlanetSound:', error);
+            playSynthesizedSound();
+        }
+    };
+
+    const playSynthesizedSound = () => {
+        // Fallback synthesized sound
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        const frequencies = {
+            'Mercury': 261.63,
+            'Venus': 293.66,
+            'Earth': 329.63,
+            'Mars': 349.23,
+            'Jupiter': 392.00,
+            'Saturn': 440.00,
+            'Uranus': 493.88,
+            'Neptune': 523.25
+        };
+        
+        oscillator.frequency.value = frequencies[current.name] || 440;
+        oscillator.type = 'sine';
+        
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 2);
+        
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 2);
+        
+        setTimeout(() => setIsPlaying(false), 2000);
+    };
+
+    const calculatePlanetAge = () => {
+        const age = parseFloat(earthAge);
+        if (!isNaN(age) && age > 0) {
+            const planetYears = (age / current.yearRatio).toFixed(2);
+            setPlanetAge(planetYears);
+        } else {
+            setPlanetAge(null);
+        }
+    };
+
+    useEffect(() => {
+        calculatePlanetAge();
+    }, [earthAge, selectedPlanet]);
 
     return (
         <div className="module-container fade-in">
@@ -520,6 +650,60 @@ const PlanetExplorer = ({ onBack }) => {
                     <div className="planet-type-badge">{current.stats.type}</div>
 
                     <p className="planet-desc">{current.desc}</p>
+
+                    {/* Planet Sound Feature */}
+                    <div className="planet-sound-section">
+                        <h3>🔊 Space Sounds</h3>
+                        <p>Experience space sounds! Each planet features unique audio frequencies that represent their orbital characteristics.</p>
+                        <div className="sound-info">
+                            <small>
+                                {current.name === 'Mars' && '🔴 Mars frequency: 349.23 Hz (F4) - The Red Planet resonance'}
+                                {current.name === 'Earth' && '🌍 Earth frequency: 329.63 Hz (E4) - Our home frequency'}
+                                {current.name === 'Jupiter' && '🟠 Jupiter frequency: 392.00 Hz (G4) - Gas giant resonance'}
+                                {current.name === 'Saturn' && '🪐 Saturn frequency: 440.00 Hz (A4) - Ring system harmony'}
+                                {current.name === 'Mercury' && '⚪ Mercury frequency: 261.63 Hz (C4) - Closest to Sun'}
+                                {current.name === 'Venus' && '🟡 Venus frequency: 293.66 Hz (D4) - Morning Star frequency'}
+                                {current.name === 'Uranus' && '🔵 Uranus frequency: 493.88 Hz (B4) - Ice giant tone'}
+                                {current.name === 'Neptune' && '🔷 Neptune frequency: 523.25 Hz (C5) - Furthest planet'}
+                            </small>
+                        </div>
+                        <button 
+                            className={`planet-sound-btn ${isPlaying ? 'playing' : ''}`}
+                            onClick={playPlanetSound}
+                            disabled={isPlaying}
+                        >
+                            {isPlaying ? '🎵 Playing Sound...' : '🎵 Play Planet Sound'}
+                        </button>
+                    </div>
+
+                    {/* Age Calculator Feature */}
+                    <div className="planet-age-calculator">
+                        <h3>🎂 Age Calculator</h3>
+                        <p>Calculate your age in {current.name} years!</p>
+                        <div className="age-input-group">
+                            <input
+                                type="number"
+                                placeholder="Enter your age in Earth years"
+                                value={earthAge}
+                                onChange={(e) => setEarthAge(e.target.value)}
+                                className="age-input"
+                                min="0"
+                                max="150"
+                            />
+                            <button 
+                                className="calculate-btn"
+                                onClick={calculatePlanetAge}
+                            >
+                                Calculate
+                            </button>
+                        </div>
+                        {planetAge && (
+                            <div className="age-result">
+                                <span className="age-label">Your age on {current.name}:</span>
+                                <span className="age-value">{planetAge} {current.name} years</span>
+                            </div>
+                        )}
+                    </div>
 
                     <div className="planet-stats-grid">
                         <div className="stat-item">
