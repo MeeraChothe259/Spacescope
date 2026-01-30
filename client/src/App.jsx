@@ -20,6 +20,7 @@ import SatelliteView from './pages/SatelliteView';
 import AdminPortal from './pages/AdminPortal';
 import InstructorConnect from './pages/InstructorConnect';
 import InstructorPortal from './pages/InstructorPortal';
+import CareerPath from './pages/CareerPath';
 
 // Simple Error Boundary
 class ErrorBoundary extends React.Component {
@@ -73,6 +74,7 @@ function App() {
                 <Route path="/instructor-connect" element={<InstructorConnect />} />
                 <Route path="/instructor/portal" element={<InstructorPortal />} />
                 <Route path="/admin" element={<AdminPortal />} />
+                <Route path="/career-path" element={<CareerPath />} />
 
               </Routes>
             </ErrorBoundary>
