@@ -172,6 +172,7 @@ const EarthLink = () => {
                     <button className="game-toggle-btn" onClick={() => setGameMode(true)}>
                         <Shield className="mr-2" size={18} /> SAVE EARTH MODE
                     </button>
+
                     <form onSubmit={handleSearch} className="search-bar">
                         <input
                             type="text"
@@ -313,6 +314,7 @@ const EarthLink = () => {
             {gameMode && (
                 <SaveEarthGame onClose={() => setGameMode(false)} />
             )}
+
         </div>
     );
 };

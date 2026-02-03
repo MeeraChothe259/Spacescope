@@ -24,10 +24,10 @@ const Navbar = () => {
         <nav className="navbar glass-panel">
             <div className="navbar-container">
                 <Link to="/" className="navbar-logo" onClick={handleLogoClick}>
-                    <Telescope className="logo-icon text-cyan-400" size={28} />
+                    <Telescope className="logo-icon" size={40} />
                     <span className="logo-text">
-                        <span className="font-bold tracking-widest text-white">SPACE</span>
-                        <span className="font-light tracking-widest text-cyan-400">SCOPE</span>
+                        <span>SPACE</span>
+                        <span>SCOPE</span>
                     </span>
                 </Link>
 

@@ -700,3 +700,1030 @@
 .restart-btn:hover {
     transform: scale(1.1);
 }
+
+/* TIME TRAVEL MODE STYLES */
+.time-travel-btn {
+    background: linear-gradient(135deg, #9c27b0, #e91e63);
+    color: #fff;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 99px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 0 20px rgba(156, 39, 176, 0.4);
+    transition: all 0.3s;
+}
+
+.time-travel-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 0 30px rgba(156, 39, 176, 0.6);
+}
+
+.time-travel-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.97);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(10px);
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.time-travel-container {
+    width: 95%;
+    max-width: 1400px;
+    height: 90vh;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a0a1a 100%);
+    border: 2px solid #9c27b0;
+    border-radius: 20px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    overflow: hidden;
+    box-shadow: 0 0 50px rgba(156, 39, 176, 0.3);
+}
+
+.close-time-travel {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(156, 39, 176, 0.5);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.3s;
+    z-index: 10;
+}
+
+.close-time-travel:hover {
+    background: #9c27b0;
+    transform: scale(1.1);
+}
+
+.time-travel-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    flex-shrink: 0;
+}
+
+.time-travel-header h1 {
+    font-size: 2.2rem;
+    background: linear-gradient(90deg, #9c27b0, #e91e63, #ff9800);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.inline-icon {
+    color: #9c27b0;
+    -webkit-text-fill-color: #9c27b0;
+}
+
+.time-travel-header .subtitle {
+    color: #aaa;
+    font-size: 0.95rem;
+}
+
+/* Timeline Selector */
+.timeline-selector {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(156, 39, 176, 0.3);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    flex-shrink: 0;
+}
+
+.year-display {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: #9c27b0;
+}
+
+.year-info {
+    text-align: center;
+}
+
+.selected-year {
+    font-size: 3.5rem;
+    font-weight: 800;
+    background: linear-gradient(90deg, #9c27b0, #e91e63);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1;
+}
+
+.year-label {
+    font-size: 0.85rem;
+    color: #ff9800;
+    font-weight: 700;
+    margin-top: 0.5rem;
+    letter-spacing: 1px;
+}
+
+.timeline-slider-container {
+    position: relative;
+    padding: 0 1rem;
+}
+
+.timeline-markers {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+    font-size: 0.75rem;
+    color: #666;
+    font-weight: 600;
+}
+
+.current-marker {
+    color: #00ff88;
+    font-weight: 800;
+}
+
+.timeline-slider {
+    width: 100%;
+    height: 8px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    outline: none;
+    position: relative;
+    z-index: 2;
+    cursor: pointer;
+}
+
+.timeline-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    background: linear-gradient(135deg, #9c27b0, #e91e63);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 20px rgba(156, 39, 176, 0.8);
+    transition: transform 0.2s;
+}
+
+.timeline-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+
+.timeline-slider::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+    background: linear-gradient(135deg, #9c27b0, #e91e63);
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 0 20px rgba(156, 39, 176, 0.8);
+}
+
+.slider-track-fill {
+    position: absolute;
+    top: 50%;
+    left: 1rem;
+    height: 8px;
+    background: linear-gradient(90deg, #9c27b0, #e91e63);
+    border-radius: 5px;
+    pointer-events: none;
+    transform: translateY(-50%);
+    transition: width 0.3s ease;
+}
+
+/* View Mode Tabs */
+.view-mode-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+}
+
+.view-mode-tabs button {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(156, 39, 176, 0.3);
+    color: #aaa;
+    padding: 0.7rem 1.2rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s;
+}
+
+.view-mode-tabs button:hover {
+    background: rgba(156, 39, 176, 0.2);
+    border-color: #9c27b0;
+    color: #fff;
+}
+
+.view-mode-tabs button.active {
+    background: linear-gradient(135deg, #9c27b0, #e91e63);
+    border-color: #e91e63;
+    color: #fff;
+    box-shadow: 0 0 20px rgba(156, 39, 176, 0.5);
+}
+
+/* Time Travel Content */
+.time-travel-content {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+    min-height: 0;
+}
+
+.time-travel-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.time-travel-content::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+}
+
+.time-travel-content::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #9c27b0, #e91e63);
+    border-radius: 4px;
+}
+
+.time-travel-content::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #e91e63, #9c27b0);
+}
+
+.loading-spinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 300px;
+    color: #9c27b0;
+}
+
+.spin-icon {
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Overview Grid */
+.overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.time-data-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 1rem;
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+    min-height: 160px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    cursor: pointer;
+}
+
+.time-data-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(156, 39, 176, 0.3);
+}
+
+.card-info-btn {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    background: rgba(156, 39, 176, 0.3);
+    border: 1px solid rgba(156, 39, 176, 0.5);
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #9c27b0;
+    transition: all 0.3s;
+    z-index: 2;
+}
+
+.card-info-btn:hover {
+    background: rgba(156, 39, 176, 0.6);
+    transform: scale(1.1);
+    color: #fff;
+}
+
+.time-data-card svg {
+    margin: 0 auto 0.5rem;
+}
+
+.time-data-card h3 {
+    font-size: 0.95rem;
+    color: #aaa;
+    margin: 0.5rem 0;
+    font-weight: 600;
+}
+
+.time-value {
+    font-size: 2.8rem;
+    font-weight: 800;
+    margin: 0.5rem 0;
+    line-height: 1;
+}
+
+.time-status,
+.temp-change,
+.soil-status {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0.5rem 0;
+    color: #ccc;
+}
+
+.data-note {
+    font-size: 0.8rem;
+    color: #888;
+    font-style: italic;
+    margin-top: 0.75rem;
+    line-height: 1.4;
+}
+
+.insight-card {
+    background: rgba(156, 39, 176, 0.1);
+    border: 1px solid rgba(156, 39, 176, 0.3);
+    border-radius: 16px;
+    padding: 2rem;
+    grid-column: 1 / -1;
+    margin-top: 1rem;
+}
+
+.insight-card h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #9c27b0;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.insight-card p {
+    color: #ccc;
+    line-height: 1.7;
+    font-size: 0.95rem;
+}
+
+/* Trends View */
+.trends-view {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 2rem;
+}
+
+.trend-chart {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 2rem;
+}
+
+.trend-chart h3 {
+    margin-bottom: 2rem;
+    text-align: center;
+    color: #9c27b0;
+}
+
+.chart-visual {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    height: 250px;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+}
+
+.chart-bar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+}
+
+.chart-bar {
+    width: 80%;
+    border-radius: 4px 4px 0 0;
+    transition: all 0.3s;
+    opacity: 0.7;
+}
+
+.chart-bar:hover,
+.chart-bar.selected {
+    opacity: 1;
+    box-shadow: 0 0 20px currentColor;
+}
+
+.chart-label {
+    font-size: 0.7rem;
+    color: #666;
+    writing-mode: horizontal-tb;
+}
+
+.chart-note {
+    text-align: center;
+    font-size: 0.85rem;
+    color: #888;
+    font-style: italic;
+}
+
+/* Milestones View */
+.milestones-view {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.milestones-timeline {
+    position: relative;
+    padding-left: 2rem;
+}
+
+.milestones-timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(180deg, #9c27b0, #e91e63, #ff9800);
+}
+
+.milestone-item {
+    position: relative;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    margin-left: 2rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.milestone-item::before {
+    content: '';
+    position: absolute;
+    left: -2.5rem;
+    top: 1.5rem;
+    width: 12px;
+    height: 12px;
+    background: #9c27b0;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #9c27b0;
+}
+
+.milestone-item:hover {
+    transform: translateX(10px);
+    background: rgba(156, 39, 176, 0.1);
+    border-color: #9c27b0;
+}
+
+.milestone-item.highlighted {
+    background: rgba(156, 39, 176, 0.2);
+    border-color: #e91e63;
+    box-shadow: 0 0 30px rgba(156, 39, 176, 0.4);
+}
+
+.milestone-item.highlighted::before {
+    background: #e91e63;
+    box-shadow: 0 0 20px #e91e63;
+    width: 16px;
+    height: 16px;
+    left: -2.7rem;
+}
+
+.milestone-item.future {
+    opacity: 0.6;
+}
+
+.milestone-item.future::before {
+    background: #ff9800;
+    box-shadow: 0 0 10px #ff9800;
+}
+
+.milestone-item {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+}
+
+.milestone-icon {
+    font-size: 2.5rem;
+    flex-shrink: 0;
+}
+
+.milestone-content {
+    flex: 1;
+}
+
+.milestone-year {
+    font-size: 0.9rem;
+    color: #9c27b0;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.milestone-content h4 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: #fff;
+}
+
+.milestone-content p {
+    color: #aaa;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+/* Agricultural Parameter Cards */
+.precipitation-card {
+    border-bottom: 4px solid #00bcd4;
+}
+
+.co2-card {
+    border-bottom: 4px solid #ff5722;
+}
+
+.crop-card {
+    border-bottom: 4px solid #8bc34a;
+}
+
+.season-card {
+    border-bottom: 4px solid #cddc39;
+}
+
+.risk-card {
+    border-bottom: 4px solid #ff9800;
+}
+
+.risk-indicators {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.risk-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    font-size: 1.1rem;
+}
+
+.risk-item span:first-child {
+    color: #aaa;
+}
+
+.risk-item span:last-child {
+    font-weight: 700;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .time-travel-container {
+        padding: 1rem;
+        height: 95vh;
+    }
+
+    .time-travel-header h1 {
+        font-size: 1.6rem;
+        gap: 0.5rem;
+    }
+
+    .time-travel-header .subtitle {
+        font-size: 0.85rem;
+    }
+
+    .timeline-selector {
+        padding: 1rem;
+    }
+
+    .year-display {
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .selected-year {
+        font-size: 2.5rem;
+    }
+
+    .year-label {
+        font-size: 0.75rem;
+    }
+
+    .year-display svg {
+        width: 24px;
+        height: 24px;
+    }
+
+    .view-mode-tabs {
+        gap: 0.5rem;
+    }
+
+    .view-mode-tabs button {
+        padding: 0.6rem 1rem;
+        font-size: 0.85rem;
+    }
+
+    .overview-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .time-data-card {
+        min-height: 180px;
+        padding: 1.25rem;
+    }
+
+    .time-value {
+        font-size: 2.5rem;
+    }
+
+    .trends-view {
+        grid-template-columns: 1fr;
+    }
+
+    .chart-visual {
+        height: 200px;
+    }
+
+    .milestone-item {
+        margin-left: 1rem;
+        padding: 1rem;
+    }
+
+    .milestone-icon {
+        font-size: 2rem;
+    }
+
+    .risk-indicators {
+        gap: 0.75rem;
+    }
+
+    .risk-item {
+        padding: 0.6rem;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .time-travel-header h1 {
+        font-size: 1.4rem;
+    }
+
+    .selected-year {
+        font-size: 2rem;
+    }
+
+    .time-value {
+        font-size: 2rem;
+    }
+
+    .time-data-card h3 {
+        font-size: 0.85rem;
+    }
+
+    .view-mode-tabs button {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.8rem;
+    }
+}
+
+@media (min-width: 1200px) {
+    .overview-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* Card Info Button */
+.time-data-card {
+    position: relative;
+    cursor: pointer;
+}
+
+.card-info-btn {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    background: rgba(156, 39, 176, 0.3);
+    border: 1px solid rgba(156, 39, 176, 0.5);
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #9c27b0;
+    transition: all 0.3s;
+    z-index: 2;
+}
+
+.card-info-btn:hover {
+    background: rgba(156, 39, 176, 0.6);
+    transform: scale(1.1);
+    color: #fff;
+}
+
+/* Parameter Info Modal */
+.param-info-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.param-info-content {
+    background: linear-gradient(135deg, #1a0a1a 0%, #0a0a0a 100%);
+    border: 2px solid #9c27b0;
+    border-radius: 20px;
+    max-width: 700px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 0 50px rgba(156, 39, 176, 0.5);
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.close-param-info {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(156, 39, 176, 0.5);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.3s;
+    z-index: 10;
+}
+
+.close-param-info:hover {
+    background: #9c27b0;
+    transform: scale(1.1);
+}
+
+.param-info-header {
+    padding: 2rem;
+    border-bottom: 1px solid rgba(156, 39, 176, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.param-icon {
+    font-size: 3rem;
+}
+
+.param-info-header h2 {
+    font-size: 1.8rem;
+    background: linear-gradient(90deg, #9c27b0, #e91e63);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0;
+}
+
+.param-info-body {
+    padding: 2rem;
+}
+
+.info-section {
+    margin-bottom: 2rem;
+}
+
+.info-section:last-child {
+    margin-bottom: 0;
+}
+
+.info-section h3 {
+    font-size: 1.1rem;
+    color: #9c27b0;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.info-section p {
+    color: #ccc;
+    line-height: 1.7;
+    font-size: 0.95rem;
+}
+
+.interpretation-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.interpretation-item {
+    display: flex;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: rgba(156, 39, 176, 0.1);
+    border-left: 3px solid #9c27b0;
+    border-radius: 4px;
+    color: #ddd;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.interpretation-bullet {
+    color: #9c27b0;
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.param-info-footer {
+    padding: 1.5rem 2rem;
+    border-top: 1px solid rgba(156, 39, 176, 0.3);
+    display: flex;
+    justify-content: center;
+}
+
+.understand-btn {
+    background: linear-gradient(135deg, #9c27b0, #e91e63);
+    color: #fff;
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 0 20px rgba(156, 39, 176, 0.5);
+}
+
+.understand-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px rgba(156, 39, 176, 0.7);
+}
+
+/* Scrollbar for modal */
+.param-info-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.param-info-content::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+}
+
+.param-info-content::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #9c27b0, #e91e63);
+    border-radius: 4px;
+}
+
+.param-info-content::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #e91e63, #9c27b0);
+}
+
+/* Responsive modal */
+@media (max-width: 768px) {
+    .param-info-header {
+        padding: 1.5rem;
+    }
+
+    .param-icon {
+        font-size: 2.5rem;
+    }
+
+    .param-info-header h2 {
+        font-size: 1.4rem;
+    }
+
+    .param-info-body {
+        padding: 1.5rem;
+    }
+
+    .info-section h3 {
+        font-size: 1rem;
+    }
+
+    .info-section p {
+        font-size: 0.9rem;
+    }
+
+    .interpretation-item {
+        font-size: 0.85rem;
+        padding: 0.6rem;
+    }
+}
+
+.milestone-info-btn {
+    top: 1rem;
+    right: 1rem;
+}
+
+/* Inline Time Travel Section Styles */
+.time-travel-section-wrapper {
+    margin-top: 4rem;
+    padding: 1rem;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.time-travel-inline-container {
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a0a1a 100%);
+    border: 2px solid #9c27b0;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 0 50px rgba(156, 39, 176, 0.2);
+    display: flex;
+    flex-direction: column;
+    min-height: 800px;
+    position: relative;
+}
+
+.time-travel-inline-container .time-travel-header h1 {
+    font-size: 2.5rem;
+}

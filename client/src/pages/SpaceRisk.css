@@ -518,22 +518,24 @@
 
 /* Grid Layout */
 .risk-grid {
-    width: 90%;
-    max-width: 900px;
+    width: 95%;
+    max-width: 1400px;
     display: grid;
     grid-template-columns: 1fr;
-    gap: 2rem;
+    gap: 1rem;
+    margin: 0 auto;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 640px) {
     .risk-grid {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
 @media (min-width: 1024px) {
     .risk-grid {
-        width: 75%;
+        grid-template-columns: repeat(4, 1fr);
+        width: 95%;
     }
 }
 
@@ -542,12 +544,18 @@
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 0.75rem;
-    padding: 2rem;
+    padding: 1rem;
+    /* Reduced padding */
     display: flex;
-    align-items: flex-start;
-    gap: 1.5rem;
+    flex-direction: column;
+    /* Stack vertically for compactness */
+    align-items: center;
+    /* Center content */
+    text-align: center;
+    gap: 1rem;
     transition: all 0.3s ease;
     cursor: default;
+    min-height: 200px;
 }
 
 .factor-card:hover {
@@ -573,12 +581,14 @@
 }
 
 .icon-wrapper {
-    padding: 1rem;
+    padding: 0.75rem;
+    /* Reduced padding */
     border-radius: 9999px;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
     transition: transform 0.3s ease;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    margin-bottom: 0.5rem;
 }
 
 .factor-card:hover .icon-wrapper {
@@ -586,19 +596,23 @@
 }
 
 .card-content-wrapper {
-    flex: 1;
+    width: 100%;
+    /* flex: 1; - Removed since we are stacking */
 }
 
 .card-header {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 0.75rem;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    flex-direction: row;
+    /* Keep row for title/score */
+    width: 100%;
 }
 
 .factor-title {
-    font-size: 1.125rem;
-    /* lg */
+    font-size: 0.9rem;
+    /* Reduced size */
     font-weight: 700;
     color: #fff;
     letter-spacing: 0.025em;
@@ -606,20 +620,19 @@
 }
 
 .factor-score {
-    font-size: 1.5rem;
-    /* 2xl */
+    font-size: 1.25rem;
+    /* Reduced size */
     font-weight: 700;
 }
 
 /* Progress Bar */
 .progress-track {
     width: 100%;
-    height: 0.75rem;
-    /* 3 */
+    height: 0.5rem;
+    /* Thinner */
     background: rgba(31, 41, 55, 0.5);
-    /* gray-800/50 */
     border-radius: 9999px;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
     overflow: hidden;
     border: 1px solid rgba(255, 255, 255, 0.05);
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
@@ -660,14 +673,14 @@
     font-weight: 500;
     letter-spacing: 0.025em;
     margin: 0;
-    font-size: 1rem;
+    font-size: 0.85rem;
+    /* Reduced size */
 }
 
 .factor-detail {
     color: #6b7280;
-    /* gray-500 */
-    font-size: 0.75rem;
-    /* xs */
+    font-size: 0.7rem;
+    /* Reduced size */
     text-transform: uppercase;
     letter-spacing: 0.05em;
     margin-top: 0.25rem;
@@ -697,18 +710,20 @@
     }
 }
 
-.map-summary{
+.map-summary {
     padding-left: 15px;
-    padding-right: 15px ;
+    padding-right: 15px;
 }
 
-.conclusion-card{
+.conclusion-card {
     padding: 15px;
     margin-bottom: 10px;
 }
-.prediction-card{
-    padding: 15px;    
+
+.prediction-card {
+    padding: 15px;
 }
-.history-footer-grid{
+
+.history-footer-grid {
     margin-bottom: 10px;
 }
