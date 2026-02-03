@@ -21,6 +21,7 @@ import AdminPortal from './pages/AdminPortal';
 import InstructorConnect from './pages/InstructorConnect';
 import InstructorPortal from './pages/InstructorPortal';
 import CareerPath from './pages/CareerPath';
+import ClimateAgriculture from './pages/ClimateAgriculture';
 
 // Simple Error Boundary
 class ErrorBoundary extends React.Component {
@@ -60,6 +61,7 @@ function App() {
               <Routes>
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/climate-agriculture" element={<ClimateAgriculture />} />
                 <Route path="/space-risk" element={<SpaceRisk />} /> {/* Phase 6 */}
                 <Route path="/satellite-view" element={<SatelliteView />} /> {/* Phase 9 */}
                 <Route path="/cosmic-weather" element={<CosmicWeather />} />

@@ -45,6 +45,7 @@ const Navbar = () => {
                 <div className={`navbar-links ${isMobileOpen ? 'mobile-open' : ''}`}>
                     <Link to="/" className="nav-link" onClick={() => setIsMobileOpen(false)}>Home</Link>
                     <Link to="/dashboard" className="nav-link" onClick={() => setIsMobileOpen(false)}>Dashboard</Link>
+                    <Link to="/climate-agriculture" className="nav-link" onClick={() => setIsMobileOpen(false)}>Climate</Link>
                     <Link to="/career-path" className="nav-link" onClick={() => setIsMobileOpen(false)}>Career Path</Link>
                     {/* <Link to="/community" className="nav-link">Crew Quarters</Link> */}
                     {/* <Link to="/cosmic-weather" className="nav-link">Cosmic Weather</Link>
