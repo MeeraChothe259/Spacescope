@@ -171,6 +171,14 @@
     position: relative;
 }
 
+.map-placeholder {
+    width: 100%;
+    height: 100% !important;
+    position: relative;
+    z-index: 1;
+    min-height: 400px;
+}
+
 .stress-circle {
     width: 200px;
     height: 100px;
@@ -423,6 +431,87 @@
     }
 
     .graph-card {
+        grid-column: span 12;
+    }
+}
+
+/* Economic Card Styles */
+.economic-card {
+    grid-column: span 6;
+    display: flex;
+    flex-direction: column;
+}
+
+.economic-summary {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.econ-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.econ-label {
+    font-size: 0.85rem;
+    color: #94a3b8;
+}
+
+.econ-val {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #fff;
+}
+
+.econ-trend {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.econ-trend.up {
+    color: #4ade80;
+}
+
+.econ-trend.down {
+    color: #f87171;
+}
+
+.efficiency-bar {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 5px;
+}
+
+.efficiency-fill {
+    height: 100%;
+    transition: width 1s ease-in-out;
+}
+
+.economic-insight {
+    margin-top: 1.5rem;
+    border-left-color: #facc15;
+}
+
+.economics-insight .micro-card-title {
+    color: #facc15;
+}
+
+.profit-chart-container {
+    margin-top: 1rem;
+    flex: 1;
+}
+
+@media (max-width: 1200px) {
+    .economic-card {
         grid-column: span 12;
     }
 }
