@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Search, AlertTriangle, Wind, Zap, Satellite, CloudRain, History, Calendar, Clock, Globe, TrendingUp, Sun, Droplets, Info, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import LocationHistory from '../components/LocationHistory';
-import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { MapContainer, TileLayer, ZoomControl, useMap } from 'react-leaflet';
+import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, AreaChart, Area } from 'recharts';
 import SmartTerm from '../components/SmartTerm';
 import './SpaceRisk.css';
 import './EarthLink.css'; // Reuse Time Travel styles
@@ -356,6 +357,17 @@ const RiskCard = ({ icon, title, score, label, detail, theme, colorClass, bgClas
     </div>
 );
 
+
+// Helper to update map center when props change
+const MapUpdater = ({ center }) => {
+    const map = useMap();
+    useEffect(() => {
+        if (center && center[0] && center[1]) {
+            map.setView(center, map.getZoom());
+        }
+    }, [center, map]);
+    return null;
+};
 
 const TimeTravelMode = ({ location, currentData }) => {
     const currentYear = new Date().getFullYear();
@@ -723,6 +735,12 @@ const TimeTravelMode = ({ location, currentData }) => {
                         <Globe size={18} /> Overview
                     </button>
                     <button
+                        className={viewMode === 'map' ? 'active' : ''}
+                        onClick={() => setViewMode('map')}
+                    >
+                        <Satellite size={18} /> Temporal Map
+                    </button>
+                    <button
                         className={viewMode === 'trends' ? 'active' : ''}
                         onClick={() => setViewMode('trends')}
                     >
@@ -911,6 +929,66 @@ const TimeTravelMode = ({ location, currentData }) => {
                                         {timelineData.isFuture && (
                                             <p>🚀 Next-gen satellites with hyperspectral imaging will detect plant diseases before visible symptoms appear. AI-powered climate models will help farmers adapt to changing growing seasons and extreme weather.</p>
                                         )}
+                                    </div>
+                                </div>
+                            )}
+
+                            {viewMode === 'map' && (
+                                <div className="temporal-analysis-map-view fade-in">
+                                    <div className="map-intro-panel glass-panel">
+                                        <div className="intro-badge">SATELLITE TELEMETRY MODE</div>
+                                        <h3>Decadal Surface Mapping: {selectedYear}</h3>
+                                        <p>Analyzing {selectedInfo || 'Atmospheric Changes'} via NASA GIBS Archives.</p>
+                                    </div>
+
+                                    <div className="temporal-map-main-container glass-panel">
+                                        <div className={`map-canvas-wrapper ${selectedYear > currentYear ? 'future-sim' : ''} ${selectedYear < 2000 ? 'historical-archive' : ''}`}>
+                                            <MapContainer
+                                                center={[location.lat || 20, location.lon || 78]}
+                                                zoom={4}
+                                                className="temporal-leaflet-map"
+                                                zoomControl={false}
+                                            >
+                                                <ZoomControl position="bottomright" />
+                                                <MapUpdater center={[location.lat || 20, location.lon || 78]} />
+
+                                                <TileLayer
+                                                    url={`https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/MODIS_Terra_CorrectedReflectance_TrueColor/default/${Math.max(2000, Math.min(2025, selectedYear))}-09-15/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg`}
+                                                    attribution="NASA GIBS"
+                                                />
+
+                                                {/* Overlay for Future or Past stress */}
+                                                <TileLayer
+                                                    url="https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png"
+                                                    opacity={0.6}
+                                                />
+                                            </MapContainer>
+
+                                            {/* Scanned Data Overlay */}
+                                            <div className="map-stats-overlay">
+                                                <div className="scan-line"></div>
+                                                <div className="overlay-data">
+                                                    <div className="data-bit">LAT: {location.lat?.toFixed(2)}</div>
+                                                    <div className="data-bit">LON: {location.lon?.toFixed(2)}</div>
+                                                    <div className="data-bit">TS: {selectedYear}-09-15</div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="map-legend-panel">
+                                            <div className="legend-item">
+                                                <div className="legend-color bg-green"></div>
+                                                <span>Safe Threshold</span>
+                                            </div>
+                                            <div className="legend-item">
+                                                <div className="legend-color bg-yellow"></div>
+                                                <span>Moderate Risk</span>
+                                            </div>
+                                            <div className="legend-item">
+                                                <div className="legend-color bg-red"></div>
+                                                <span>Critical Anomaly</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             )}

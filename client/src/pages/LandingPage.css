@@ -178,8 +178,8 @@
     position: absolute;
     top: 0;
     right: 0;
-    width: 65%;
-    /* 65% Overlap */
+    width: 60%;
+    /* 60% Overlap */
     height: 100%;
     z-index: 1;
     /* Behind overlapping text */
@@ -199,7 +199,7 @@
     position: absolute;
     top: 0;
     left: 0;
-    width: 20%;
+    width: 15%;
     height: 100%;
     /* Transparent for global galaxy */
     pointer-events: none;
@@ -245,9 +245,9 @@
     }
 }
 
+/* --- SPACE TIMELINE SECTION --- */
 .timeline-section {
-    padding: 6rem 4rem;
-    /* Transparent for global galaxy */
+    padding: 3rem 4rem;
     position: relative;
     z-index: 20;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
@@ -256,21 +256,21 @@
 }
 
 .timeline-container {
-    /* max-width: 900px; */
-    width: 100%;
+    width: 90%;
+    max-width: 1000px;
     text-align: center;
     background: rgba(255, 255, 255, 0.03);
     backdrop-filter: blur(15px);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 3rem;
-    border-radius: 20px;
+    padding: 2rem 3rem;
+    border-radius: 16px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 }
 
 .timeline-title {
     font-family: 'Playfair Display', serif;
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
     letter-spacing: 2px;
 }
 
@@ -280,30 +280,30 @@
 }
 
 .timeline-subtitle {
-    font-size: 1rem;
+    font-size: 0.9rem;
     color: rgba(255, 255, 255, 0.6);
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
 }
 
 .timeline-form {
     display: flex;
     justify-content: center;
-    gap: 1.5rem;
+    gap: 1rem;
     flex-wrap: wrap;
-    margin-bottom: 4rem;
+    margin-bottom: 2.5rem;
 }
 
 .cinematic-input {
     background: rgba(30, 30, 30, 0.8);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 1rem 1.5rem;
+    padding: 0.8rem 1.2rem;
     color: #fff;
     font-family: 'Inter', sans-serif;
-    font-size: 1rem;
+    font-size: 0.9rem;
     border-radius: 4px;
     outline: none;
     transition: all 0.3s;
-    min-width: 200px;
+    min-width: 180px;
 }
 
 .cinematic-input:focus {
@@ -315,12 +315,13 @@
     background: #22A6B3;
     color: #000;
     border: none;
-    padding: 1rem 2rem;
+    padding: 0.8rem 1.5rem;
     font-weight: 700;
     letter-spacing: 1px;
     cursor: pointer;
     border-radius: 4px;
     transition: all 0.3s;
+    font-size: 0.9rem;
 }
 
 .generate-btn:hover {
@@ -339,59 +340,30 @@
 }
 
 .result-header h3 {
-    font-size: 1.2rem;
+    font-size: 1rem;
     letter-spacing: 3px;
     color: #22A6B3;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     text-transform: uppercase;
 }
 
 .facts-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 3rem;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
 }
 
 .fact-card {
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 2rem;
+    padding: 1.5rem;
     border-radius: 12px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-}
-
-.moon-card-visual {
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%) !important;
-    border-color: rgba(34, 166, 179, 0.2) !important;
-}
-
-.moon-3d-container {
-    width: 150px;
-    height: 150px;
-    margin-bottom: 1rem;
-    position: relative;
-    cursor: grab;
-}
-
-.moon-3d-container:active {
-    cursor: grabbing;
-}
-
-.moon-text-info h4 {
-    margin-top: 0.5rem;
-}
-
-.highlight-value {
-    color: #22A6B3 !important;
-    font-size: 1.2rem !important;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    font-weight: 800 !important;
 }
 
 .fact-card:hover {
@@ -401,29 +373,58 @@
 }
 
 .fact-icon {
-    font-size: 2rem;
+    font-size: 1.5rem;
     display: block;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
 }
 
 .fact-card h4 {
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     letter-spacing: 1px;
     color: rgba(255, 255, 255, 0.5);
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.25rem;
     text-transform: uppercase;
 }
 
 .fact-card p {
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 600;
     color: #fff;
+}
+
+.highlight-value {
+    color: #22A6B3;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 800;
+}
+
+.moon-card-visual {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%) !important;
+    border-color: rgba(34, 166, 179, 0.2) !important;
+}
+
+.moon-3d-container {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 0.5rem;
+    position: relative;
+    cursor: grab;
+}
+
+.moon-3d-container:active {
+    cursor: grabbing;
+}
+
+.moon-text-info h4 {
+    margin-top: 0.25rem;
 }
 
 .emotional-hook p {
     font-family: 'Playfair Display', serif;
     font-style: italic;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     color: rgba(255, 255, 255, 0.8);
     max-width: 600px;
     margin: 0 auto;
@@ -441,6 +442,7 @@
     }
 }
 
+/* --- FEATURE MODULES (Rest of Page) --- */
 .modules-section {
     padding: 6rem 4rem;
     /* Transparent for global galaxy */

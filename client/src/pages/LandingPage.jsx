@@ -4,9 +4,7 @@ import { ArrowRight, Globe, Radio, ShieldAlert, ChevronDown, Telescope, Activity
 import SmartTerm from '../components/SmartTerm';
 import './LandingPage.css';
 import SolarSystem from '../components/SolarSystem';
-import SpaceTimeline from '../components/SpaceTimeline'; // Import Feature
-import '../pages/LandingPage.css';
-
+import SpaceTimeline from '../components/SpaceTimeline';
 const LandingPage = () => {
     const [scrollY, setScrollY] = useState(0);
 

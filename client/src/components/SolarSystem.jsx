@@ -226,7 +226,7 @@ const Sun = () => {
 
 const SolarSystem = () => {
     return (
-        <Canvas camera={{ position: [0, 45, 30], fov: 45 }} gl={{ antialias: true, toneMapping: THREE.ReinhardToneMapping, toneMappingExposure: 1.5 }} dpr={[1, 2]}>
+        <Canvas camera={{ position: [0, 48, 32], fov: 45 }} gl={{ antialias: true, toneMapping: THREE.ReinhardToneMapping, toneMappingExposure: 1.5 }} dpr={[1, 2]}>
             <ambientLight intensity={0.25} />
             <Stars radius={300} depth={60} count={30000} factor={8} saturation={0} fade speed={0.5} />
 

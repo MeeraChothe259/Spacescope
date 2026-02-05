@@ -1,7 +1,7 @@
-import React, { useState, useMemo, useRef, Suspense } from 'react';
+import React, { useState, useRef, Suspense } from 'react';
 import * as Astronomy from 'astronomy-engine';
 import { Canvas, useFrame, useLoader } from '@react-three/fiber';
-import { OrbitControls, Stars, Float } from '@react-three/drei';
+import { OrbitControls, Float } from '@react-three/drei';
 import * as THREE from 'three';
 
 const MOON_TEXTURE = 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/moon_1024.jpg';
@@ -10,10 +10,8 @@ const BdayMoon = ({ phaseAngle }) => {
     const meshRef = useRef();
     const texture = useLoader(THREE.TextureLoader, MOON_TEXTURE);
 
-    // Calculate light position based on phase angle (0-360)
-    // 0: New Moon, 180: Full Moon
     const angleRad = (phaseAngle * Math.PI) / 180;
-    const lightDist = 15;
+    const lightDist = 10;
     const lightPos = [
         lightDist * Math.sin(angleRad),
         0,
@@ -27,15 +25,19 @@ const BdayMoon = ({ phaseAngle }) => {
     });
 
     return (
-        <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
-            <ambientLight intensity={0.1} />
-            <pointLight position={lightPos} intensity={30} color="#ffffff" decay={1} />
+        <Float speed={1.5} rotationIntensity={0.3} floatIntensity={0.3}>
+            <ambientLight intensity={0.8} />
+            {/* Phase Light */}
+            <pointLight position={lightPos} intensity={40} color="#ffffff" decay={1} />
+            {/* Camera Fill Light - ensures visibility even in dark phases */}
+            <pointLight position={[0, 0, 10]} intensity={20} color="#ffffff" decay={1} />
             <mesh ref={meshRef}>
-                <sphereGeometry args={[2.4, 64, 64]} />
+                <sphereGeometry args={[2.5, 64, 64]} />
                 <meshStandardMaterial
                     map={texture}
-                    roughness={1}
-                    metalness={0.05}
+                    roughness={0.8}
+                    metalness={0.1}
+                    emissive="#111111"
                 />
             </mesh>
             <OrbitControls enableZoom={false} enablePan={false} />
@@ -170,8 +172,8 @@ const SpaceTimeline = () => {
                         <div className="facts-grid">
                             <div className="fact-card moon-card-visual">
                                 <div className="moon-3d-container">
-                                    <Canvas camera={{ position: [0, 0, 7], fov: 45 }}>
-                                        <Suspense fallback={null}>
+                                    <Canvas camera={{ position: [0, 0, 8], fov: 40 }}>
+                                        <Suspense fallback={<mesh><sphereGeometry args={[1, 16, 16]} /><meshBasicMaterial color="#333" wireframe /></mesh>}>
                                             <BdayMoon phaseAngle={result.moonPhase} />
                                         </Suspense>
                                     </Canvas>
