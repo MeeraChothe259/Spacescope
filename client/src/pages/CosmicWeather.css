@@ -419,6 +419,19 @@
     box-shadow: inset -30px -30px 60px rgba(0, 0, 0, 0.8),
         0 0 50px rgba(100, 200, 255, 0.3);
     animation: rotateEarth 60s linear infinite;
+    display: none;
+    /* Hide old CSS globe */
+}
+
+.earth-canvas-wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 280px;
+    height: 280px;
+    z-index: 1;
+    pointer-events: none;
 }
 
 @keyframes rotateEarth {
@@ -429,17 +442,6 @@
     to {
         transform: rotate(360deg);
     }
-}
-
-.earth-surface {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background:
-        radial-gradient(circle at 30% 30%, #4a90e2, #2c5f8d),
-        linear-gradient(135deg, #1a472a 0%, #2d5a3d 25%, #4a90e2 50%, #2c5f8d 75%, #1a472a 100%);
-    background-size: 200% 200%;
-    animation: earthTexture 120s linear infinite;
 }
 
 @keyframes earthTexture {
@@ -546,6 +548,11 @@
 .particle-color {
     background: #ffeb3b;
     box-shadow: 0 0 6px #ffeb3b;
+}
+
+.atmosphere-color {
+    background: radial-gradient(circle, rgba(100, 200, 255, 0.4) 0%, rgba(100, 200, 255, 0.2) 100%);
+    border: 1px solid rgba(100, 200, 255, 0.5);
 }
 
 /* Stats Panel */
@@ -685,6 +692,7 @@
         height: 200px;
     }
 }
-.status-label{
+
+.status-label {
     padding-right: 5px;
 }

@@ -14,7 +14,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: ["http://localhost:5173", "http://localhost:3000"],
+        origin: ["http://localhost:5173", "http://localhost:5174", "http://localhost:5175", "http://localhost:3000"],
         methods: ["GET", "POST"]
     }
 });
@@ -649,7 +649,11 @@ app.get('/api/solar-flares', async (req, res) => {
         const response = await fetchNOAA(`https://kauai.ccmc.gsfc.nasa.gov/DONKI/FLR?startDate=${startDate}&endDate=${endDate}`);
         res.json(response.data);
     } catch (error) {
-        console.error('Error fetching solar flares:', error.message);
+        if (error.response && error.response.status === 404) {
+            // Silently handle 404 (NASA API temporarily unavailable)
+        } else {
+            console.warn('Error fetching solar flares:', error.message);
+        }
         // Return empty array instead of error - flares are optional
         res.json([]);
     }

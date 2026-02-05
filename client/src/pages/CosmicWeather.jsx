@@ -1,4 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useMemo, Suspense } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { useTexture, Stars } from '@react-three/drei';
+import * as THREE from 'three';
 import './CosmicWeather.css';
 import { Wind, Activity, Zap, Radio, AlertTriangle, ShieldAlert } from 'lucide-react';
 import SmartTerm from '../components/SmartTerm';
@@ -364,6 +367,44 @@ const ImpactMeter = ({ kIndex }) => {
     );
 };
 
+// --- 3D EARTH COMPONENTS ---
+const EarthGlobe = () => {
+    const meshRef = useRef();
+    const [texture, cloudsTexture] = useTexture([
+        'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/earth_atmos_2048.jpg',
+        'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/earth_clouds_1024.png'
+    ]);
+
+    useFrame(({ clock }) => {
+        if (meshRef.current) {
+            meshRef.current.rotation.y = clock.getElapsedTime() * 0.1;
+        }
+    });
+
+    return (
+        <group>
+            <mesh ref={meshRef}>
+                <sphereGeometry args={[2.5, 64, 64]} />
+                <meshStandardMaterial
+                    map={texture}
+                    roughness={0.7}
+                    metalness={0.2}
+                />
+                {/* Clouds Layer */}
+                <mesh scale={[1.01, 1.01, 1.01]}>
+                    <sphereGeometry args={[2.5, 64, 64]} />
+                    <meshStandardMaterial
+                        map={cloudsTexture}
+                        transparent
+                        opacity={0.3}
+                        blending={THREE.AdditiveBlending}
+                    />
+                </mesh>
+            </mesh>
+        </group>
+    );
+};
+
 // 3D EARTH WITH SPACE WEATHER VISUALIZATION
 const Live3DEarth = ({ kIndex, solarWindSpeed, bzGsm }) => {
     // Calculate shield status based on conditions
@@ -429,71 +470,80 @@ const Live3DEarth = ({ kIndex, solarWindSpeed, bzGsm }) => {
                     >
                         <div className="shield-ripple"></div>
                     </div>
-
-                    {/* Earth Globe */}
-                    <div className="earth-globe">
-                        {/* Earth surface */}
-                        <div className="earth-surface"></div>
-
-                        {/* Aurora Borealis (North) */}
-                        <div
-                            className="aurora aurora-north"
-                            style={{
-                                height: `${auroraSize}%`,
-                                opacity: kIndex >= 3 ? 0.8 : 0.5
-                            }}
-                        ></div>
-
-                        {/* Aurora Australis (South) */}
-                        <div
-                            className="aurora aurora-south"
-                            style={{
-                                height: `${auroraSize}%`,
-                                opacity: kIndex >= 3 ? 0.8 : 0.5
-                            }}
-                        ></div>
-
-                        {/* Atmosphere glow */}
-                        <div className="atmosphere-glow"></div>
+                    {/* Earth Globe (Refactored to 3D) */}
+                    <div className="earth-canvas-wrapper">
+                        <Canvas camera={{ position: [0, 0, 8], fov: 45 }}>
+                            <ambientLight intensity={1.5} />
+                            <pointLight position={[10, 10, 10]} intensity={450} color="#ffffff" />
+                            <Suspense fallback={null}>
+                                <EarthGlobe />
+                                <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
+                            </Suspense>
+                        </Canvas>
                     </div>
+
+                    {/* Aurora Borealis (North) - Re-integrated over 3D Globe */}
+                    <div
+                        className="aurora aurora-north"
+                        style={{
+                            height: `${auroraSize}%`,
+                            opacity: kIndex >= 3 ? 0.8 : 0.5
+                        }}
+                    ></div>
+
+                    {/* Aurora Australis (South) */}
+                    <div
+                        className="aurora aurora-south"
+                        style={{
+                            height: `${auroraSize}%`,
+                            opacity: kIndex >= 3 ? 0.8 : 0.5
+                        }}
+                    ></div>
+
+                    {/* Atmosphere glow */}
+                    <div className="atmosphere-glow"></div>
                 </div>
+            </div>
 
-                {/* Legend */}
-                <div className="earth-legend">
-                    <div className="legend-item">
-                        <div className="legend-color" style={{ background: shield.color }}></div>
-                        <span>Magnetic Shield: {shield.intensity.toUpperCase()}</span>
-                    </div>
-                    <div className="legend-item">
-                        <div className="legend-color aurora-color"></div>
-                        <span>Aurora Zone: ±{auroraSize}° Latitude</span>
-                    </div>
-                    <div className="legend-item">
-                        <div className="legend-color particle-color"></div>
-                        <span>Solar Wind: {Math.round(solarWindSpeed)} km/s</span>
-                    </div>
+            {/* Legend */}
+            <div className="earth-legend">
+                <div className="legend-item">
+                    <div className="legend-color" style={{ background: shield.color }}></div>
+                    <span>Magnetic Shield: {shield.intensity.toUpperCase()}</span>
                 </div>
+                <div className="legend-item">
+                    <div className="legend-color atmosphere-color"></div>
+                    <span>Atmosphere / Ionosphere</span>
+                </div>
+                <div className="legend-item">
+                    <div className="legend-color aurora-color"></div>
+                    <span>Aurora Zone: ±{auroraSize}° Latitude</span>
+                </div>
+                <div className="legend-item">
+                    <div className="legend-color particle-color"></div>
+                    <span>Solar Wind: {Math.round(solarWindSpeed)} km/s</span>
+                </div>
+            </div>
 
-                {/* Status Indicators */}
-                <div className="earth-stats">
-                    <div className="stat-row">
-                        <span className="stat-label">Kp Index:</span>
-                        <span className={`stat-value ${kIndex >= 5 ? 'text-red-400' : kIndex >= 3 ? 'text-yellow-400' : 'text-green-400'}`}>
-                            {kIndex}
-                        </span>
-                    </div>
-                    <div className="stat-row">
-                        <span className="stat-label">Bz Component:</span>
-                        <span className={`stat-value ${typeof bzGsm === 'number' && bzGsm < -5 ? 'text-red-400' : 'text-green-400'}`}>
-                            {typeof bzGsm === 'number' ? bzGsm.toFixed(1) : bzGsm} nT
-                        </span>
-                    </div>
-                    <div className="stat-row">
-                        <span className="stat-label">Shield Status:</span>
-                        <span className={`stat-value`} style={{ color: shield.color }}>
-                            {shield.compression < 0.9 ? 'COMPRESSED' : 'STABLE'}
-                        </span>
-                    </div>
+            {/* Status Indicators */}
+            <div className="earth-stats">
+                <div className="stat-row">
+                    <span className="stat-label">Kp Index:</span>
+                    <span className={`stat-value ${kIndex >= 5 ? 'text-red-400' : kIndex >= 3 ? 'text-yellow-400' : 'text-green-400'}`}>
+                        {kIndex}
+                    </span>
+                </div>
+                <div className="stat-row">
+                    <span className="stat-label">Bz Component:</span>
+                    <span className={`stat-value ${typeof bzGsm === 'number' && bzGsm < -5 ? 'text-red-400' : 'text-green-400'}`}>
+                        {typeof bzGsm === 'number' ? bzGsm.toFixed(1) : bzGsm} nT
+                    </span>
+                </div>
+                <div className="stat-row">
+                    <span className="stat-label">Shield Status:</span>
+                    <span className={`stat-value`} style={{ color: shield.color }}>
+                        {shield.compression < 0.9 ? 'COMPRESSED' : 'STABLE'}
+                    </span>
                 </div>
             </div>
 
@@ -506,7 +556,7 @@ const Live3DEarth = ({ kIndex, solarWindSpeed, bzGsm }) => {
                     {kIndex < 3 && " ✅ Calm conditions - shield stable."}
                 </p>
             </div>
-        </div>
+        </div >
     );
 };
 
