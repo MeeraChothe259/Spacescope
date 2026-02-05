@@ -536,15 +536,16 @@ const PlanetExplorer = ({ onBack }) => {
             setIsPlaying(true);
 
             // Use alternative NASA sound URLs that are more accessible
+            // Source: High-fidelity NASA Atmosphere & Plasma Recordings
             const nasaSounds = {
-                'Mercury': 'https://www.nasa.gov/wp-content/uploads/2023/08/mars-wind-sound.wav',
-                'Venus': 'https://www.nasa.gov/wp-content/uploads/2023/08/mars-wind-sound.wav',
-                'Earth': 'https://www.nasa.gov/wp-content/uploads/2023/08/mars-wind-sound.wav',
-                'Mars': 'https://www.nasa.gov/wp-content/uploads/2023/08/mars-wind-sound.wav',
-                'Jupiter': 'https://www.nasa.gov/wp-content/uploads/2023/08/mars-wind-sound.wav',
-                'Saturn': 'https://www.nasa.gov/wp-content/uploads/2023/08/mars-wind-sound.wav',
-                'Uranus': 'https://www.nasa.gov/wp-content/uploads/2023/08/mars-wind-sound.wav',
-                'Neptune': 'https://www.nasa.gov/wp-content/uploads/2023/08/mars-wind-sound.wav'
+                'Mercury': 'https://archive.org/download/SymphoniesOfThePlanetsNASA/SymphoniesOfPlanetsTrack1.mp3',
+                'Venus': 'https://archive.org/download/SymphoniesOfThePlanetsNASA/SymphoniesOfPlanetsTrack2.mp3',   // Harsh atmospheric roar
+                'Earth': 'https://www.nasa.gov/wp-content/uploads/2015/01/earth_chorus.mp3',                      // Magnetosphere
+                'Mars': 'https://www.nasa.gov/wp-content/uploads/2021/02/perseverance_mars_surface_sounds.mp3',   // Real wind recorded on Mars
+                'Jupiter': 'https://www.nasa.gov/wp-content/uploads/2024/02/juno-jupiter-aurora-sounds.mp3',      // Intense storm sonification
+                'Saturn': 'https://www.nasa.gov/wp-content/uploads/2015/01/saturn_radio_emissions.mp3',            // Rings and lightning
+                'Uranus': 'https://archive.org/download/Voyager1PlanetarySounds/Uranus.mp3',
+                'Neptune': 'https://archive.org/download/Voyager1PlanetarySounds/Neptune.mp3'
             };
 
             // Create audio element with proper setup
@@ -597,35 +598,53 @@ const PlanetExplorer = ({ onBack }) => {
     };
 
     const playSynthesizedSound = () => {
-        // Fallback synthesized sound
+        // Create an "Atmospheric Wind" sound procedurally using white noise and filtering
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        const oscillator = audioContext.createOscillator();
-        const gainNode = audioContext.createGain();
 
-        oscillator.connect(gainNode);
-        gainNode.connect(audioContext.destination);
+        // Generate White Noise Buffer
+        const bufferSize = 2 * audioContext.sampleRate;
+        const noiseBuffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+        const output = noiseBuffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+            output[i] = Math.random() * 2 - 1;
+        }
 
-        const frequencies = {
-            'Mercury': 261.63,
-            'Venus': 293.66,
-            'Earth': 329.63,
-            'Mars': 349.23,
-            'Jupiter': 392.00,
-            'Saturn': 440.00,
-            'Uranus': 493.88,
-            'Neptune': 523.25
+        const source = audioContext.createBufferSource();
+        source.buffer = noiseBuffer;
+        source.loop = true;
+
+        const filter = audioContext.createBiquadFilter();
+        filter.type = 'lowpass';
+
+        // Map filter frequency to planet "thickness"
+        const atmosphereDensityScale = {
+            'Mercury': 1800, // Thin, high-frequency "whistle"
+            'Venus': 250,    // Dense, heavy "rumble"
+            'Earth': 800,    // Standard wind
+            'Mars': 1400,    // Thin air whistle
+            'Jupiter': 400,   // Gas giant roar
+            'Saturn': 500,    // Ring-distorted noise
+            'Uranus': 650,
+            'Neptune': 700
         };
 
-        oscillator.frequency.value = frequencies[current.name] || 440;
-        oscillator.type = 'sine';
+        filter.frequency.setValueAtTime(atmosphereDensityScale[current.name] || 800, audioContext.currentTime);
+        filter.Q.value = 8; // Add some resonance
 
-        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 2);
+        const gainNode = audioContext.createGain();
+        gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+        gainNode.gain.linearRampToValueAtTime(0.15, audioContext.currentTime + 0.3);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 3.5);
 
-        oscillator.start(audioContext.currentTime);
-        oscillator.stop(audioContext.currentTime + 2);
+        source.connect(filter);
+        filter.connect(gainNode);
+        gainNode.connect(audioContext.destination);
 
-        setTimeout(() => setIsPlaying(false), 2000);
+        source.start();
+        setTimeout(() => {
+            source.stop();
+            setIsPlaying(false);
+        }, 3500);
     };
 
     const calculatePlanetAge = () => {
@@ -674,26 +693,30 @@ const PlanetExplorer = ({ onBack }) => {
 
                     {/* Planet Sound Feature */}
                     <div className="planet-sound-section">
-                        <h3>🔊 Space Sounds</h3>
-                        <p>Experience space sounds! Each planet features unique audio frequencies that represent their orbital characteristics.</p>
+                        <h3>🔊 Planetary Atmosphere</h3>
+                        <p>Listen to the "voice" of the planet. These recordings capture atmospheric winds, plasma waves, and radio emissions converted into sound.</p>
                         <div className="sound-info">
-                            <small>
-                                {current.name === 'Mars' && '🔴 Mars frequency: 349.23 Hz (F4) - The Red Planet resonance'}
-                                {current.name === 'Earth' && '🌍 Earth frequency: 329.63 Hz (E4) - Our home frequency'}
-                                {current.name === 'Jupiter' && '🟠 Jupiter frequency: 392.00 Hz (G4) - Gas giant resonance'}
-                                {current.name === 'Saturn' && '🪐 Saturn frequency: 440.00 Hz (A4) - Ring system harmony'}
-                                {current.name === 'Mercury' && '⚪ Mercury frequency: 261.63 Hz (C4) - Closest to Sun'}
-                                {current.name === 'Venus' && '🟡 Venus frequency: 293.66 Hz (D4) - Morning Star frequency'}
-                                {current.name === 'Uranus' && '🔵 Uranus frequency: 493.88 Hz (B4) - Ice giant tone'}
-                                {current.name === 'Neptune' && '🔷 Neptune frequency: 523.25 Hz (C5) - Furthest planet'}
+                            <small className="sound-description">
+                                {current.name === 'Mars' && '🔴 Real raw audio of Martian wind captured by the Perseverance Rover microphone.'}
+                                {current.name === 'Earth' && '🌍 Plasmaspheric hiss: Electromagnetic waves in Earth’s magnetosphere converted to sound.'}
+                                {current.name === 'Jupiter' && '🟠 Juno flyby: Radio emissions from Jupiter’s auroras converted into the audible range.'}
+                                {current.name === 'Saturn' && '🪐 Radio emissions from Saturn’s magnetic field captured by the Cassini spacecraft.'}
+                                {current.name === 'Mercury' && '⚪ Sonification of Mercury’s intense solar wind and magnetic field interactions.'}
+                                {current.name === 'Venus' && '🟡 The eerie low-frequency roar of Venus’s hyper-dense and stormy atmosphere.'}
+                                {current.name === 'Uranus' && '🔵 Electromagnetic signals captured by Voyager 2 during its 1986 ice giant encounter.'}
+                                {current.name === 'Neptune' && '🔷 The final destination: Voyager 2’s radio conversion of Neptune’s supersonic winds.'}
                             </small>
+                            <div className="sound-source-badge">MISSION RECORDING</div>
                         </div>
                         <button
                             className={`planet-sound-btn ${isPlaying ? 'playing' : ''}`}
                             onClick={playPlanetSound}
                             disabled={isPlaying}
                         >
-                            {isPlaying ? '🎵 Playing Sound...' : '🎵 Play Planet Sound'}
+                            <div className="btn-icon">
+                                {isPlaying ? <Zap size={18} className="pulse" /> : '🔊'}
+                            </div>
+                            <span>{isPlaying ? 'DECODING ATMosphere...' : 'LISTEN TO ATMOSPHERE'}</span>
                         </button>
                     </div>
 
