@@ -357,8 +357,41 @@
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.1);
     padding: 2rem;
-    border-radius: 8px;
-    transition: transform 0.3s;
+    border-radius: 12px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.moon-card-visual {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%) !important;
+    border-color: rgba(34, 166, 179, 0.2) !important;
+}
+
+.moon-3d-container {
+    width: 150px;
+    height: 150px;
+    margin-bottom: 1rem;
+    position: relative;
+    cursor: grab;
+}
+
+.moon-3d-container:active {
+    cursor: grabbing;
+}
+
+.moon-text-info h4 {
+    margin-top: 0.5rem;
+}
+
+.highlight-value {
+    color: #22A6B3 !important;
+    font-size: 1.2rem !important;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 800 !important;
 }
 
 .fact-card:hover {

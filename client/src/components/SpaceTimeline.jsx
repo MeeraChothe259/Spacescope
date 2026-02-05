@@ -1,5 +1,47 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useRef, Suspense } from 'react';
 import * as Astronomy from 'astronomy-engine';
+import { Canvas, useFrame, useLoader } from '@react-three/fiber';
+import { OrbitControls, Stars, Float } from '@react-three/drei';
+import * as THREE from 'three';
+
+const MOON_TEXTURE = 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/moon_1024.jpg';
+
+const BdayMoon = ({ phaseAngle }) => {
+    const meshRef = useRef();
+    const texture = useLoader(THREE.TextureLoader, MOON_TEXTURE);
+
+    // Calculate light position based on phase angle (0-360)
+    // 0: New Moon, 180: Full Moon
+    const angleRad = (phaseAngle * Math.PI) / 180;
+    const lightDist = 15;
+    const lightPos = [
+        lightDist * Math.sin(angleRad),
+        0,
+        -lightDist * Math.cos(angleRad)
+    ];
+
+    useFrame((state) => {
+        if (meshRef.current) {
+            meshRef.current.rotation.y += 0.001;
+        }
+    });
+
+    return (
+        <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
+            <ambientLight intensity={0.1} />
+            <pointLight position={lightPos} intensity={30} color="#ffffff" decay={1} />
+            <mesh ref={meshRef}>
+                <sphereGeometry args={[2.4, 64, 64]} />
+                <meshStandardMaterial
+                    map={texture}
+                    roughness={1}
+                    metalness={0.05}
+                />
+            </mesh>
+            <OrbitControls enableZoom={false} enablePan={false} />
+        </Float>
+    );
+};
 
 const SpaceTimeline = () => {
     const [formData, setFormData] = useState({ city: '', date: '' });
@@ -75,6 +117,7 @@ const SpaceTimeline = () => {
 
             setResult({
                 moonText,
+                moonPhase, // Pass the numerical phase for 3D
                 co2,
                 solarActivity,
                 zodiac,
@@ -125,10 +168,18 @@ const SpaceTimeline = () => {
                         </div>
 
                         <div className="facts-grid">
-                            <div className="fact-card">
-                                <span className="fact-icon">🌑</span>
-                                <h4>The Moon Was</h4>
-                                <p>{result.moonText}</p>
+                            <div className="fact-card moon-card-visual">
+                                <div className="moon-3d-container">
+                                    <Canvas camera={{ position: [0, 0, 7], fov: 45 }}>
+                                        <Suspense fallback={null}>
+                                            <BdayMoon phaseAngle={result.moonPhase} />
+                                        </Suspense>
+                                    </Canvas>
+                                </div>
+                                <div className="moon-text-info">
+                                    <h4>Lunar Phase</h4>
+                                    <p className="highlight-value">{result.moonText}</p>
+                                </div>
                             </div>
 
                             <div className="fact-card">
