@@ -276,7 +276,6 @@ const EarthLink = () => {
                                             : 'Unknown Coords'}
                                     </p>
                                 </div>
-                                <a href={alert.link} target="_blank" rel="noopener noreferrer" className="alert-link">Map →</a>
                             </div>
                         ))
                     )}
@@ -328,10 +327,10 @@ const SaveEarthGame = ({ onClose }) => {
     const [gameOver, setGameOver] = useState(false);
 
     const facts = [
-        { title: "Magnetosphere", content: "Earth's magnetic field acts as a shield, deflecting solar wind particles that would otherwise strip away our atmosphere." },
-        { title: "Solar Wind", content: "The Sun continuously emits a stream of charged particles called the solar wind, traveling at millions of kilometers per hour." },
-        { title: "CME (Coronal Mass Ejection)", content: "A massive burst of solar wind and magnetic fields, a CME can overwhelm Earth's shield, causing geomagnetic storms." },
-        { title: "Aurora", content: "When solar particles bypass the shield near the poles, they excite atmospheric gases, creating beautiful shimmering lights." },
+        { title: "Magnetosphere", content: <>Earth's <SmartTerm term="Magnetic Field" display="magnetic field" /> acts as a shield, deflecting <SmartTerm term="Solar Wind" /> particles that would otherwise strip away our <SmartTerm term="Atmosphere" />.</> },
+        { title: "Solar Wind", content: <><SmartTerm term="Solar Wind" display="The Sun continuously emits a stream of charged particles" /> called the solar wind, traveling at millions of kilometers per hour.</> },
+        { title: "CME (Coronal Mass Ejection)", content: <>A massive burst of solar wind and magnetic fields, a <SmartTerm term="Coronal Mass Ejection" display="CME" /> can overwhelm Earth's shield, causing <SmartTerm term="Geomagnetic Storm" display="geomagnetic storms" />.</> },
+        { title: "Aurora", content: <>When solar particles bypass the shield near the poles, they excite <SmartTerm term="Atmosphere" display="atmospheric gases" />, creating beautiful shimmering lights called <SmartTerm term="Aurora" display="auroras" />.</> },
         { title: "Van Allen Belts", content: "Regions of trapped radiation around Earth that help filter high-energy particles before they reach the surface." }
     ];
 

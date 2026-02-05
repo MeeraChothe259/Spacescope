@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Rocket, Clock, Calendar, Globe, Satellite, Filter, ChevronRight, Play } from 'lucide-react';
+import SmartTerm from '../components/SmartTerm';
 import './Missions.css';
 
 const Missions = () => {
@@ -110,7 +111,7 @@ const Missions = () => {
                     backgroundImage: nextLaunch.image ? `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.9)), url(${nextLaunch.image})` : undefined
                 }}>
                     <div className="hero-content">
-                        <div className="badge-live">NEXT MISSION</div>
+                        <div className="badge-live">NEXT <SmartTerm term="Mission" /></div>
                         <h1 className="hero-title">{nextLaunch.name}</h1>
                         <p className="hero-provider">{nextLaunch.launch_service_provider?.name}</p>
 
@@ -138,7 +139,7 @@ const Missions = () => {
 
             {/* Mission Section Header - Positioned Above the Timeline */}
             <div className="timeline-header-block">
-                <h2 className="section-title">Mission Timeline</h2>
+                <h2 className="section-title"><SmartTerm term="Mission" /> Timeline</h2>
                 <div className="filters-container">
                     <div className="filters">
                         {['ALL', 'SPACEX', 'ISRO', 'MOON', 'MARS'].map(f => (
@@ -185,7 +186,7 @@ const Missions = () => {
                                         </div>
                                         {mission.pad && (
                                             <div className="meta-item">
-                                                <Satellite size={14} />
+                                                <SmartTerm term="Satellite" display={<Satellite size={14} />} />
                                                 <span>{mission.pad.location?.name}</span>
                                             </div>
                                         )}

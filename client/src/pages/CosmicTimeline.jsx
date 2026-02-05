@@ -4,6 +4,7 @@ import { OrbitControls, Stars, Float, Text, useTexture } from '@react-three/drei
 import * as THREE from 'three';
 import * as Astronomy from 'astronomy-engine';
 import { Calendar, Globe, Zap, Navigation, Wind, Layers, AlertCircle } from 'lucide-react';
+import SmartTerm from '../components/SmartTerm';
 import './CosmicTimeline.css';
 
 // --- TEXTURE FALLBACKS & ASSETS ---
@@ -286,7 +287,7 @@ const CosmicTimeline = () => {
                         <Navigation className="header-icon text-cyan-400" />
                         <div>
                             <h1 className="glow-text">Cosmic Timeline</h1>
-                            <p className="subtitle">High-fidelity orbital telemetry</p>
+                            <p className="subtitle">High-fidelity <SmartTerm term="Orbit" display="orbital" /> telemetry</p>
                         </div>
                     </div>
 
@@ -307,11 +308,11 @@ const CosmicTimeline = () => {
                     <div className="indicators-row">
                         <div className="mini-indicator glass-panel">
                             <Wind size={14} className="text-yellow-400" />
-                            <span>SOLAR WIND WAVE: ACTIVE</span>
+                            <span><SmartTerm term="Solar Wind" display="SOLAR WIND" /> WAVE: ACTIVE</span>
                         </div>
                         <div className="mini-indicator glass-panel">
                             <Layers size={14} className="text-blue-400" />
-                            <span>ISS TELEMETRY: LIVE</span>
+                            <span><SmartTerm term="ISS" /> TELEMETRY: LIVE</span>
                         </div>
                     </div>
                 </div>
@@ -399,7 +400,7 @@ const CosmicTimeline = () => {
             <div className="hud-bottom-right">
                 <div className="hud-item glass-panel">
                     <Globe size={16} className="text-blue-400" />
-                    <span>ORBITAL SYNC: 99.9%</span>
+                    <span><SmartTerm term="Orbit" display="ORBITAL SYNC" />: 99.9%</span>
                 </div>
             </div>
         </div>

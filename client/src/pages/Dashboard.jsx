@@ -32,9 +32,9 @@ const Dashboard = () => {
                     <a href="/space-events" className="view-details-link">Check Visibility →</a>
                 </div>
                 <div className="glass-panel widget weather-summary-widget">
-                    <h3>Asteroid Radar</h3>
+                    <h3><SmartTerm term="Asteroid" display="Asteroid Radar" /></h3>
                     <div className="summary-status text-yellow-400">Active Scan</div>
-                    <a href="/asteroid-radar" className="view-details-link">Monitor NEOs →</a>
+                    <a href="/asteroid-radar" className="view-details-link">Monitor <SmartTerm term="NEO" display="NEOs" /> →</a>
                 </div>
                 <div className="glass-panel widget weather-summary-widget">
                     <h3>Missions</h3>

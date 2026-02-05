@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Globe, Radio, ShieldAlert, ChevronDown, Telescope, Activity, Satellite, Rocket } from 'lucide-react';
+import SmartTerm from '../components/SmartTerm';
 import './LandingPage.css';
 import SolarSystem from '../components/SolarSystem';
 import SpaceTimeline from '../components/SpaceTimeline'; // Import Feature
@@ -37,7 +38,7 @@ const LandingPage = () => {
 
                         <p className="cinematic-subtitle">
                             We bridge the gap between Earth and the Void. Real-time tracking of
-                            solar winds, asteroids, and orbital assets. Your personal command center
+                            <SmartTerm term="Solar Wind" display="solar winds" />, <SmartTerm term="Asteroid" display="asteroids" />, and orbital assets. Your personal command center
                             for the solar system.
                         </p>
 
@@ -55,7 +56,7 @@ const LandingPage = () => {
                         <div className="hero-stats">
                             <div className="stat-item">
                                 <span className="stat-value">400+</span>
-                                <span className="stat-label">SATELLITES</span>
+                                <span className="stat-label"><SmartTerm term="Satellite" display="SATELLITES" /></span>
                             </div>
                             <div className="stat-separator"></div>
                             <div className="stat-item">
@@ -111,7 +112,7 @@ const LandingPage = () => {
                         <div className="card-content">
                             <Radio size={32} className="card-icon" />
                             <h3>Solar Watch</h3>
-                            <p>Geomagnetic storm alerts and solar flares.</p>
+                            <p><SmartTerm term="Geomagnetic Storm" display="Geomagnetic storm" /> alerts and <SmartTerm term="Solar Flare" display="solar flares" />.</p>
                             <span className="card-link">VIEW TELEMETRY <ArrowRight size={14} /></span>
                         </div>
                     </Link>
@@ -121,7 +122,7 @@ const LandingPage = () => {
                         <div className="card-content">
                             <ShieldAlert size={32} className="card-icon" />
                             <h3>Asteroid Radar</h3>
-                            <p>Near-Earth Object defense network tracking.</p>
+                            <p><SmartTerm term="NEO" display="Near-Earth Object" /> defense network tracking.</p>
                             <span className="card-link">TRACK THREATS <ArrowRight size={14} /></span>
                         </div>
                     </Link>

@@ -21,6 +21,7 @@ import {
     TrendingDown,
     Activity
 } from 'lucide-react';
+import SmartTerm from '../components/SmartTerm';
 import './ClimateAgriculture.css';
 
 // --- DATA CONSTANTS ---
@@ -460,7 +461,7 @@ const ClimateAgriculture = () => {
                     <span style={{ color: '#64748b', fontSize: '0.9rem', fontWeight: '600', letterSpacing: '1px' }}>SPACESCOPE INTELLIGENCE</span>
                     <h1>Agri-Climate Monitor</h1>
                     <p style={{ color: '#94a3b8', maxWidth: '600px' }}>
-                        Real-time satellite monitoring of global agricultural hotspots.
+                        Real-time <SmartTerm term="Satellite" /> monitoring of global agricultural hotspots.
                         Analyze crop health, moisture levels, and climate risks using multi-spectral orbital data.
                     </p>
                 </div>
@@ -485,8 +486,8 @@ const ClimateAgriculture = () => {
                 <div className="dashboard-card map-card">
                     <div className="map-header">
                         <div className="card-title">
-                            <MapIcon size={18} className="text-blue-400" />
-                            <span>Satellite Moisture & Vegetation Map</span>
+                            <SmartTerm term="Orbit" display={<MapIcon size={18} className="text-blue-400" />} />
+                            <span><SmartTerm term="Satellite" /> Moisture & Vegetation Map</span>
                         </div>
                     </div>
 
@@ -569,7 +570,7 @@ const ClimateAgriculture = () => {
                     </div>
 
                     <div className="micro-card">
-                        <span className="micro-card-title"><Satellite size={14} /> SATELLITE INSIGHT</span>
+                        <span className="micro-card-title"><Satellite size={14} /> <SmartTerm term="Satellite" display="SATELLITE INSIGHT" /></span>
                         <p>
                             Multi-spectral analysis indicates {selectedRegion.stress === 'high' ? 'severe moisture deficit in root zones.' : 'healthy chlorophyll levels in canopy.'}
                             Predicted yield impact: <span style={{ color: selectedRegion.stress === 'high' ? '#f87171' : '#4ade80' }}>{selectedRegion.stress === 'high' ? '-15%' : '+5%'}</span>

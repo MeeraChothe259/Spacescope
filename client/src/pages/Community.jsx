@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Users, Upload, CheckCircle, XCircle, MessageSquare, Image as ImageIcon, Send, ShieldCheck, Clock, Eye, HelpCircle, UserPlus, FileText } from 'lucide-react';
+import SmartTerm from '../components/SmartTerm';
 import './Community.css';
 
 const Community = () => {
@@ -375,6 +376,9 @@ const Community = () => {
                                 <div className="form-group">
                                     <label>Specialization</label>
                                     <input required placeholder="e.g. Exoplanet Topology, Orbital Mechanics" onChange={e => setInstructorForm({ ...instructorForm, specialization: e.target.value })} />
+                                    <div style={{ fontSize: '0.7rem', opacity: 0.6, marginTop: '4px' }}>
+                                        Fields like <SmartTerm term="Orbit" display="Orbital Mechanics" /> are highly valued.
+                                    </div>
                                 </div>
 
                                 <div className="form-group">

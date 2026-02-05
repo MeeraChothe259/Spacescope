@@ -3,6 +3,7 @@ import { ArrowLeft, Search, AlertTriangle, Wind, Zap, Satellite, CloudRain, Hist
 import { Link } from 'react-router-dom';
 import LocationHistory from '../components/LocationHistory';
 import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import SmartTerm from '../components/SmartTerm';
 import './SpaceRisk.css';
 import './EarthLink.css'; // Reuse Time Travel styles
 
@@ -132,7 +133,7 @@ const SpaceRisk = () => {
                 </Link>
                 <div className="header-content">
                     <h1 className="risk-title">SPACE RISK <span className="text-cyan">SCANNER</span></h1>
-                    <p className="risk-subtitle">Environmental & Orbital Threat Assessment</p>
+                    <p className="risk-subtitle">Environmental & Orbital <SmartTerm term="Hazardous" display="Threat" /> Assessment</p>
                 </div>
             </header>
 
@@ -181,7 +182,7 @@ const SpaceRisk = () => {
                             {/* Solar */}
                             <RiskCard
                                 icon={<Zap size={28} className="text-yellow" />}
-                                title="Solar Storm Exposure"
+                                title={<SmartTerm term="Space Weather" display="Solar Storm Exposure" />}
                                 score={riskData.breakdown.solar.score}
                                 label={riskData.breakdown.solar.label}
                                 detail={riskData.breakdown.solar.val}
@@ -220,7 +221,7 @@ const SpaceRisk = () => {
                             {/* Satellite */}
                             <RiskCard
                                 icon={<Satellite size={28} className="text-purple" />}
-                                title="Satellite Dependency"
+                                title={<SmartTerm term="Satellite" display="Satellite Dependency" />}
                                 score={riskData.breakdown.satellite.score}
                                 label={riskData.breakdown.satellite.label}
                                 detail={riskData.breakdown.satellite.val}

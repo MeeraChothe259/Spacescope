@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Radar, AlertTriangle, Shield, Activity, Database, Scale, Info } from 'lucide-react';
+import { Search, Info, AlertCircle, Calendar, Target, Shield, Gauge, Move, Globe, Orbit, Zap, Share2, Rocket } from 'lucide-react';
 import SmartTerm from '../components/SmartTerm';
 import './AsteroidRadar.css';
 
@@ -97,7 +97,7 @@ const AsteroidRadar = () => {
         <div className="asteroid-radar-container">
             <header className="radar-page-header">
                 <h1 className="page-title glow-text">
-                    <span className="text-gradient">Asteroid</span> Radar
+                    <span className="text-gradient"><SmartTerm term="Asteroid" /></span> Radar
                 </h1>
                 <div className="subtitle text-center text-secondary mb-8 -mt-6">
                     <SmartTerm term="NEO" display="Near-Earth Object" /> Surveillance Network
@@ -181,7 +181,7 @@ const AsteroidRadar = () => {
                                     </div>
                                 </div>
                                 <div className="detail-item">
-                                    <Activity size={18} className="text-gray-400" />
+                                    <Move size={18} className="text-gray-400" />
                                     <div>
                                         <div className="label"><SmartTerm term="Velocity" /></div>
                                         <div className="value">
@@ -190,7 +190,7 @@ const AsteroidRadar = () => {
                                     </div>
                                 </div>
                                 <div className="detail-item">
-                                    <Shield size={18} className="text-gray-400" />
+                                    <Target size={18} className="text-gray-400" />
                                     <div>
                                         <div className="label"><SmartTerm term="Miss Distance" /></div>
                                         <div className="value">
@@ -229,9 +229,6 @@ const AsteroidRadar = () => {
                                     </div>
                                 </div>
                             </div>
-                            <a href={selectedAsteroid.nasa_jpl_url} target="_blank" rel="noopener noreferrer" className="jpl-link">
-                                View Full JPL Data →
-                            </a>
                         </div>
                     ) : (
                         <div className="select-prompt">Select an object on radar</div>
@@ -261,11 +258,16 @@ const AsteroidRadar = () => {
                             {stats.largest ? `${stats.largest.estimated_diameter.kilometers.estimated_diameter_max.toFixed(2)} km` : '--'}
                         </span>
                     </div>
-                </div>
+                </div >
 
                 {/* 4. List View */}
-                <div className="glass-panel list-panel">
-                    <h3>Today's Approaches</h3>
+                < div className="glass-panel list-panel" >
+                    <div className="section-header">
+                        <h2><SmartTerm term="Asteroid" /> Monitoring</h2>
+                        <div className="discovery-stats">
+                            <SmartTerm term="NEO" /> objects detected in proximity
+                        </div>
+                    </div>
                     <div className="asteroid-list">
                         {asteroids.map(ast => (
                             <div
@@ -278,10 +280,10 @@ const AsteroidRadar = () => {
                             </div>
                         ))}
                     </div>
-                </div>
+                </div >
 
-            </div>
-        </div>
+            </div >
+        </div >
     );
 };
 

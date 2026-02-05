@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BookOpen, Brain, Cpu, Gamepad2, Rocket, RotateCcw, Check, X, Globe, Zap, ChevronLeft, ChevronRight } from 'lucide-react';
+import SmartTerm from '../components/SmartTerm';
 import './Learn.css';
 
 const Learn = () => {
@@ -374,22 +375,42 @@ const TechStories = ({ onBack }) => {
         {
             title: "GPS Navigation",
             icon: <Globe size={32} />,
-            desc: "Originally developed for military satellite tracking, the Global Positioning System (GPS) now powers Google Maps, Uber, and even aircraft navigation."
+            desc: <>Originally developed for military <SmartTerm term="Satellite" /> tracking, the <SmartTerm term="GPS" display="Global Positioning System (GPS)" /> now powers Google Maps, Uber, and even aircraft navigation.</>
         },
         {
             title: "Memory Foam",
             icon: <Brain size={32} />,
-            desc: "NASA developed viscoelastic foam to cushion astronauts during lift-off. Today, it's in your mattress and pillows for better sleep!"
+            desc: <>NASA developed viscoelastic foam to cushion astronauts during lift-off. Today, it's in your mattress and pillows for better sleep!</>
         },
         {
             title: "Camera Phones",
             icon: <Cpu size={32} />,
-            desc: "CMOS image sensors were miniaturized by NASA JPL for interplanetary probes. This tech is now the heart of every smartphone camera."
+            desc: <>CMOS image sensors were miniaturized by NASA JPL for interplanetary <SmartTerm term="Probe" display="probes" />. This tech is now the heart of every smartphone camera.</>
         },
         {
             title: "Scratch-Resistant Lenses",
             icon: <Rocket size={32} />,
-            desc: "Carbon coating tech used on space helmet visors to prevent scratches from moon dust is now used on your eyeglasses."
+            desc: <>Carbon coating tech used on space helmet visors to prevent scratches from moon dust is now used on your eyeglasses.</>
+        },
+        {
+            title: "Water Filtration",
+            icon: <Globe size={32} />,
+            desc: <>NASA developed advanced water purification systems for the <SmartTerm term="ISS" /> to recycle every drop. This same tech provides clean water in remote areas on Earth.</>
+        },
+        {
+            title: "Insulin Pumps",
+            icon: <Zap size={32} />,
+            desc: <>The technology used to monitor Mars Viking lander life-support systems led to the creation of the first implantable insulin pumps for diabetics.</>
+        },
+        {
+            title: "Wireless Tools",
+            icon: <Cpu size={32} />,
+            desc: <>Black & Decker collaborated with NASA to develop cordless, battery-powered drills for Apollo moon samples, paving the way for modern cordless tools.</>
+        },
+        {
+            title: "Invisible Braces",
+            icon: <Brain size={32} />,
+            desc: <>Translucent polycrystalline alumina (TPA) was developed to protect infrared switches on heat-seeking missiles. It's now used for aesthetic orthodontic braces.</>
         }
     ];
 
@@ -513,7 +534,7 @@ const PlanetExplorer = ({ onBack }) => {
     const playPlanetSound = async () => {
         try {
             setIsPlaying(true);
-            
+
             // Use alternative NASA sound URLs that are more accessible
             const nasaSounds = {
                 'Mercury': 'https://www.nasa.gov/wp-content/uploads/2023/08/mars-wind-sound.wav',
@@ -529,10 +550,10 @@ const PlanetExplorer = ({ onBack }) => {
             // Create audio element with proper setup
             const audio = new Audio();
             audio.crossOrigin = "anonymous";
-            
+
             try {
                 audio.src = nasaSounds[current.name];
-                
+
                 audio.addEventListener('canplaythrough', () => {
                     console.log('NASA audio loaded successfully');
                     audio.play().then(() => {
@@ -555,7 +576,7 @@ const PlanetExplorer = ({ onBack }) => {
                 });
 
                 audio.load();
-                
+
                 // Fallback timeout
                 setTimeout(() => {
                     if (isPlaying) {
@@ -563,7 +584,7 @@ const PlanetExplorer = ({ onBack }) => {
                         playSynthesizedSound();
                     }
                 }, 3000);
-                
+
             } catch (soundError) {
                 console.log('Error setting up NASA audio:', soundError);
                 playSynthesizedSound();
@@ -580,10 +601,10 @@ const PlanetExplorer = ({ onBack }) => {
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
         const oscillator = audioContext.createOscillator();
         const gainNode = audioContext.createGain();
-        
+
         oscillator.connect(gainNode);
         gainNode.connect(audioContext.destination);
-        
+
         const frequencies = {
             'Mercury': 261.63,
             'Venus': 293.66,
@@ -594,16 +615,16 @@ const PlanetExplorer = ({ onBack }) => {
             'Uranus': 493.88,
             'Neptune': 523.25
         };
-        
+
         oscillator.frequency.value = frequencies[current.name] || 440;
         oscillator.type = 'sine';
-        
+
         gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
         gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 2);
-        
+
         oscillator.start(audioContext.currentTime);
         oscillator.stop(audioContext.currentTime + 2);
-        
+
         setTimeout(() => setIsPlaying(false), 2000);
     };
 
@@ -667,7 +688,7 @@ const PlanetExplorer = ({ onBack }) => {
                                 {current.name === 'Neptune' && '🔷 Neptune frequency: 523.25 Hz (C5) - Furthest planet'}
                             </small>
                         </div>
-                        <button 
+                        <button
                             className={`planet-sound-btn ${isPlaying ? 'playing' : ''}`}
                             onClick={playPlanetSound}
                             disabled={isPlaying}
@@ -690,7 +711,7 @@ const PlanetExplorer = ({ onBack }) => {
                                 min="0"
                                 max="150"
                             />
-                            <button 
+                            <button
                                 className="calculate-btn"
                                 onClick={calculatePlanetAge}
                             >
@@ -711,11 +732,11 @@ const PlanetExplorer = ({ onBack }) => {
                             <span className="value">{current.stats.moons}</span>
                         </div>
                         <div className="stat-item">
-                            <span className="label">Day Length</span>
+                            <span className="label"><SmartTerm term="Orbit" display="Day Length" /></span>
                             <span className="value">{current.stats.day}</span>
                         </div>
                         <div className="stat-item">
-                            <span className="label">Year Length</span>
+                            <span className="label"><SmartTerm term="Orbit" display="Year Length" /></span>
                             <span className="value">{current.stats.year}</span>
                         </div>
                     </div>
@@ -830,7 +851,7 @@ const StarExplorer = ({ onBack }) => {
                     <div className="planet-stats-grid">
                         <div className="stat-item">
                             <span className="label">Distance</span>
-                            <span className="value">{current.stats.dist}</span>
+                            <span className="value"><SmartTerm term="Light Year" display={current.stats.dist} /></span>
                         </div>
                         <div className="stat-item">
                             <span className="label">Mass</span>
@@ -868,7 +889,7 @@ const EducationSnacks = ({ onBack }) => {
             emoji: "⚡",
             gradient: "linear-gradient(135deg, #ff6b6b, #ee5a6f)",
             content: [
-                "Solar storms can knock out GPS, power grids, and satellites.",
+                <><SmartTerm term="Solar Flare" display="Solar storms" /> can knock out <SmartTerm term="GPS" />, power grids, and <SmartTerm term="Satellite" display="satellites" />.</>,
                 "In 1989, a solar storm caused a 9-hour blackout in Quebec, Canada.",
                 "Airlines reroute flights to avoid radiation during major storms.",
                 "Your smartphone relies on satellites that are vulnerable to these storms."
@@ -880,7 +901,7 @@ const EducationSnacks = ({ onBack }) => {
             emoji: "🛰️",
             gradient: "linear-gradient(135deg, #4facfe, #00f2fe)",
             content: [
-                "Satellites detect rising water levels before floods hit populated areas.",
+                <><SmartTerm term="Satellite" display="Satellites" /> detect rising water levels before floods hit populated areas.</>,
                 "They provide real-time data to emergency services for evacuation planning.",
                 "Weather satellites track storm patterns that cause flooding.",
                 "Flood prediction accuracy has improved by 60% thanks to satellite data."
@@ -892,8 +913,8 @@ const EducationSnacks = ({ onBack }) => {
             emoji: "☄️",
             gradient: "linear-gradient(135deg, #f093fb, #f5576c)",
             content: [
-                "A 140-meter asteroid could destroy an entire city if it hits Earth.",
-                "NASA tracks over 30,000 near-Earth objects constantly.",
+                <>A 140-meter <SmartTerm term="Asteroid" /> could destroy an entire city if it hits Earth.</>,
+                <>NASA tracks over 30,000 <SmartTerm term="NEO" display="near-Earth objects" /> constantly.</>,
                 "The Chelyabinsk meteor (2013) injured 1,500 people - and we didn't see it coming.",
                 "With enough warning, we could deflect a dangerous asteroid (NASA proved this in 2022)."
             ],
@@ -904,9 +925,9 @@ const EducationSnacks = ({ onBack }) => {
             emoji: "🌌",
             gradient: "linear-gradient(135deg, #a8edea, #fed6e3)",
             content: [
-                "Space weather affects astronauts' radiation exposure on the ISS.",
-                "Solar flares can disrupt radio communications for aircraft.",
-                "Geomagnetic storms interfere with oil pipeline operations.",
+                <><SmartTerm term="Space Weather" /> affects astronauts' radiation exposure on the <SmartTerm term="ISS" />.</>,
+                <><SmartTerm term="Solar Flare" display="Solar flares" /> can disrupt radio communications for aircraft.</>,
+                <><SmartTerm term="Geomagnetic Storm" display="Geomagnetic storms" /> interfere with oil pipeline operations.</>,
                 "Forecasting helps protect $2 trillion worth of space infrastructure."
             ],
             impact: "Real-world impact: Space weather forecasting protects critical infrastructure and human lives."
@@ -916,8 +937,8 @@ const EducationSnacks = ({ onBack }) => {
             emoji: "🔴",
             gradient: "linear-gradient(135deg, #ff9a56, #ff6a88)",
             content: [
-                "Mars research helps us understand climate change on Earth.",
-                "Technologies developed for Mars rovers improve medical robotics.",
+                <><SmartTerm term="Planet" display="Mars" /> research helps us understand climate change on Earth.</>,
+                <><SmartTerm term="Rover" display="Technologies" /> developed for Mars <SmartTerm term="Rover" display="rovers" /> improve medical robotics.</>,
                 "Studying Mars geology reveals how planets form and evolve.",
                 "Mars missions inspire millions to pursue STEM careers."
             ],
@@ -928,10 +949,10 @@ const EducationSnacks = ({ onBack }) => {
             emoji: "🚀",
             gradient: "linear-gradient(135deg, #667eea, #764ba2)",
             content: [
-                "Rocket fuel research led to better water filtration systems.",
+                <><SmartTerm term="Launch Vehicle" display="Rocket" /> fuel research led to better water filtration systems.</>,
                 "Lightweight materials from spacecraft are now in prosthetic limbs.",
                 "Rocket engine cooling tech is used in modern air conditioning.",
-                "Launch vehicle innovations improve electric car batteries."
+                <><SmartTerm term="Launch Vehicle" /> innovations improve electric car batteries.</>
             ],
             impact: "Real-world impact: Rocket technology innovations touch your daily life in unexpected ways."
         },
@@ -940,7 +961,7 @@ const EducationSnacks = ({ onBack }) => {
             emoji: "🌙",
             gradient: "linear-gradient(135deg, #e0c3fc, #8ec5fc)",
             content: [
-                "The Moon stabilizes Earth's tilt, giving us stable seasons.",
+                <>The <SmartTerm term="Moon Phase" display="Moon" /> stabilizes Earth's tilt, giving us stable seasons.</>,
                 "Lunar missions test technologies for deep space exploration.",
                 "Moon dust research improves air filtration and construction materials.",
                 "The Moon is a stepping stone for Mars missions and beyond."
