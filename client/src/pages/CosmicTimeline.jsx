@@ -1,29 +1,69 @@
 import React, { useState, useMemo, useRef, Suspense, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Stars, Float, Text, useTexture } from '@react-three/drei';
+import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import * as THREE from 'three';
 import * as Astronomy from 'astronomy-engine';
 import { Calendar, Globe, Zap, Navigation, Wind, Layers, AlertCircle } from 'lucide-react';
 import SmartTerm from '../components/SmartTerm';
 import './CosmicTimeline.css';
 
-// --- TEXTURE FALLBACKS & ASSETS ---
+// --- TEXTURE FALLBACKS & ASSETS (Wikimedia Real-Color) ---
 const TEXTURES = {
-    Mercury: 'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/mercury.jpg',
-    Venus: 'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/venus_surface.jpg',
-    Earth: 'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_atmos_2048.jpg',
-    Mars: 'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/mars_1k_color.jpg',
-    Jupiter: 'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/jupiter.jpg',
-    Saturn: 'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/saturn.jpg',
-    Uranus: 'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/uranus.jpg',
-    Neptune: 'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/neptune.jpg',
-    Sun: 'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/lava/lavatile.jpg'
+    Mercury: 'https://raw.githubusercontent.com/homer-jay/solar-system-textures/master/2k_mercury.jpg',
+    Venus: 'https://raw.githubusercontent.com/homer-jay/solar-system-textures/master/2k_venus_atmosphere.jpg',
+    Earth: 'https://raw.githubusercontent.com/homer-jay/solar-system-textures/master/2k_earth_daymap.jpg',
+    Mars: 'https://raw.githubusercontent.com/homer-jay/solar-system-textures/master/2k_mars.jpg',
+    Jupiter: 'https://raw.githubusercontent.com/homer-jay/solar-system-textures/master/2k_jupiter.jpg',
+    Saturn: 'https://raw.githubusercontent.com/homer-jay/solar-system-textures/master/2k_saturn.jpg',
+    SaturnRing: 'https://raw.githubusercontent.com/homer-jay/solar-system-textures/master/2k_saturn_ring_alpha.png',
+    Uranus: 'https://raw.githubusercontent.com/homer-jay/solar-system-textures/master/2k_uranus.jpg',
+    Neptune: 'https://raw.githubusercontent.com/homer-jay/solar-system-textures/master/2k_neptune.jpg',
+    Moon: 'https://raw.githubusercontent.com/homer-jay/solar-system-textures/master/2k_moon.jpg'
+};
+
+// Procedural texture generator for Sun
+const createSunTexture = () => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 512;
+    canvas.height = 512;
+    const ctx = canvas.getContext('2d');
+    const gradient = ctx.createRadialGradient(256, 256, 0, 256, 256, 256);
+    gradient.addColorStop(0, '#ffffff');      // Core white heat
+    gradient.addColorStop(0.1, '#fff6e5');    // Very bright yellow
+    gradient.addColorStop(0.2, '#ffdd00');    // Yellow
+    gradient.addColorStop(0.4, '#ff8800');    // Orange
+    gradient.addColorStop(0.8, '#cc4400');    // Dark orange
+    gradient.addColorStop(1, '#880000');      // Red edge
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, 512, 512);
+
+    for (let i = 0; i < 6000; i++) {
+        const x = Math.random() * 512;
+        const y = Math.random() * 512;
+        ctx.fillStyle = `rgba(255, 255, 255, ${Math.random() * 0.3})`;
+        ctx.beginPath();
+        ctx.arc(x, y, Math.random() * 3 + 1, 0, Math.PI * 2);
+        ctx.fill();
+    }
+
+    // Add darker spots (sunspots)
+    for (let i = 0; i < 30; i++) {
+        const x = Math.random() * 512;
+        const y = Math.random() * 512;
+        const r = Math.random() * 15 + 5;
+        ctx.fillStyle = `rgba(0, 0, 0, ${Math.random() * 0.15})`;
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fill();
+    }
+    return new THREE.CanvasTexture(canvas);
 };
 
 const BODIES = [
     { name: 'Mercury', size: 0.6, body: 'Mercury', color: '#A5A5A5' },
     { name: 'Venus', size: 1.0, body: 'Venus', color: '#E3BB76' },
-    { name: 'Earth', size: 1.1, body: 'Earth', color: '#2271B3', hasISS: true },
+    { name: 'Earth', size: 1.1, body: 'Earth', color: '#2271B3', hasMoon: true },
     { name: 'Mars', size: 0.8, body: 'Mars', color: '#E27B58' },
     { name: 'Jupiter', size: 2.5, body: 'Jupiter', color: '#D39C7E' },
     { name: 'Saturn', size: 2.1, body: 'Saturn', color: '#C5AB6E', rings: true },
@@ -44,6 +84,22 @@ const getPlanetPos = (body, date) => {
         ];
     } catch (e) {
         return [0, 0, 0];
+    }
+};
+
+const getMoonPos = (date) => {
+    try {
+        const vector = Astronomy.GeoVector("Moon", date);
+        // Moon is at ~0.00257 AU from Earth center.
+        // We scale this to ~3.85 units for visual clarity.
+        const scale = 1500;
+        return [
+            vector.x * scale,
+            vector.z * scale,
+            vector.y * scale
+        ];
+    } catch (e) {
+        return [3.8, 0, 0];
     }
 };
 
@@ -73,10 +129,7 @@ class CanvasErrorBoundary extends React.Component {
 
 const Sun = () => {
     const sunRef = useRef();
-    let texture = null;
-    try {
-        texture = useTexture(TEXTURES.Sun);
-    } catch (e) { }
+    const sunTexture = useMemo(() => createSunTexture(), []);
 
     useFrame(({ clock }) => {
         sunRef.current.rotation.y = clock.getElapsedTime() * 0.05;
@@ -86,16 +139,16 @@ const Sun = () => {
         <group>
             <mesh ref={sunRef}>
                 <sphereGeometry args={[4.5, 64, 64]} />
-                <meshStandardMaterial
-                    map={texture}
-                    emissive="#ff4400"
-                    emissiveIntensity={3}
-                    color="#ff8800"
+                <meshBasicMaterial
+                    map={sunTexture}
+                    color="#ffffff"
+                    toneMapped={false}
                 />
             </mesh>
-            <pointLight intensity={150} distance={400} color="#ffcc00" />
+            <pointLight intensity={250} distance={600} color="#ffcc00" decay={1.5} />
             <SolarWindWaves />
 
+            {/* Subtle Sun Atmosphere */}
             <mesh>
                 <sphereGeometry args={[4.7, 32, 32]} />
                 <meshBasicMaterial color="#ffcc00" transparent opacity={0.15} />
@@ -150,28 +203,6 @@ const SolarWindWaves = () => {
     );
 };
 
-const ISSOrbit = () => {
-    const issRef = useRef();
-    useFrame(({ clock }) => {
-        const t = clock.getElapsedTime() * 2.5;
-        issRef.current.position.x = Math.cos(t) * 1.8;
-        issRef.current.position.z = Math.sin(t) * 1.8;
-        issRef.current.position.y = Math.sin(t * 0.8) * 0.7;
-    });
-
-    return (
-        <group>
-            <mesh ref={issRef}>
-                <boxGeometry args={[0.08, 0.04, 0.2]} />
-                <meshStandardMaterial color="#ffffff" emissive="#00f2ff" emissiveIntensity={3} />
-            </mesh>
-            <mesh rotation={[Math.PI / 2.2, 0, 0]}>
-                <ringGeometry args={[1.78, 1.8, 64]} />
-                <meshBasicMaterial color="#00f2ff" transparent opacity={0.15} side={THREE.DoubleSide} />
-            </mesh>
-        </group>
-    );
-};
 
 const AsteroidBelt = () => {
     const count = 500;
@@ -202,15 +233,60 @@ const AsteroidBelt = () => {
     );
 };
 
-const Planet = ({ body, size, name, hasRings, hasISS, color, date }) => {
+const Moon = ({ date }) => {
+    const moonRef = useRef();
+    const pos = useMemo(() => getMoonPos(date), [date]);
+    let texture = null;
+    try {
+        texture = useTexture(TEXTURES.Moon);
+    } catch (e) { }
+
+    useFrame(() => {
+        if (moonRef.current) moonRef.current.rotation.y += 0.01;
+    });
+
+    return (
+        <group position={pos}>
+            <mesh ref={moonRef}>
+                <sphereGeometry args={[0.3, 32, 32]} />
+                <meshStandardMaterial map={texture} color={texture ? '#ffffff' : '#888888'} roughness={0.9} />
+            </mesh>
+            <Text
+                position={[0, 0.6, 0]}
+                fontSize={0.3}
+                color="#cccccc"
+                anchorX="center"
+                anchorY="middle"
+            >
+                MOON
+            </Text>
+        </group>
+    );
+};
+
+const MoonOrbit = ({ date }) => {
+    const pos = useMemo(() => getMoonPos(date), [date]);
+    const radius = Math.sqrt(pos[0] ** 2 + pos[1] ** 2 + pos[2] ** 2);
+
+    return (
+        <mesh rotation={[Math.PI / 2, 0, 0]}>
+            <ringGeometry args={[radius, radius + 0.02, 64]} />
+            <meshBasicMaterial color="#ffffff" transparent opacity={0.1} side={THREE.DoubleSide} />
+        </mesh>
+    );
+};
+
+const Planet = ({ body, size, name, rings, hasMoon, color, date }) => {
     const meshRef = useRef();
     const pos = useMemo(() => getPlanetPos(body, date), [body, date]);
 
     let texture = null;
+    let ringTexture = null;
     try {
         texture = useTexture(TEXTURES[name]);
+        if (rings) ringTexture = useTexture(TEXTURES.SaturnRing);
     } catch (e) {
-        console.warn(`Texture failed for ${name}, using flat color.`);
+        // Fallback or silent failure
     }
 
     useFrame(() => {
@@ -218,41 +294,51 @@ const Planet = ({ body, size, name, hasRings, hasISS, color, date }) => {
     });
 
     return (
-        <group position={pos}>
-            <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.2}>
-                <mesh ref={meshRef}>
-                    <sphereGeometry args={[size, 64, 64]} />
-                    <meshStandardMaterial
-                        map={texture}
-                        color={texture ? '#ffffff' : color}
-                        roughness={0.7}
-                        metalness={0.2}
-                    />
-                    {hasRings && (
-                        <mesh rotation={[Math.PI / 2.5, 0, 0]}>
-                            <ringGeometry args={[size * 1.4, size * 2.8, 64]} />
-                            <meshStandardMaterial color="#d2b48c" transparent opacity={0.4} side={THREE.DoubleSide} />
-                        </mesh>
-                    )}
-                </mesh>
-                <Text
-                    position={[0, size + 1.5, 0]}
-                    fontSize={0.6}
-                    color="white"
-                    anchorX="center"
-                    anchorY="middle"
-                    outlineWidth={0.03}
-                    outlineColor="#000000"
-                >
-                    {name}
-                </Text>
-                {hasISS && <ISSOrbit />}
-            </Float>
-
-            <mesh rotation={[Math.PI / 2, 0, 0]}>
-                <ringGeometry args={[Math.sqrt(pos[0] ** 2 + pos[2] ** 2), Math.sqrt(pos[0] ** 2 + pos[2] ** 2) + 0.1, 128]} />
-                <meshBasicMaterial color="#ffffff" transparent opacity={0.04} side={THREE.DoubleSide} />
+        <group>
+            {/* Orbit Ring Indicator centered at origin (Sun) */}
+            <mesh rotation={[-Math.PI / 2, 0, 0]}>
+                <ringGeometry args={[Math.sqrt(pos[0] ** 2 + pos[2] ** 2), Math.sqrt(pos[0] ** 2 + pos[2] ** 2) + 0.15, 128]} />
+                <meshBasicMaterial color="#00f2ff" transparent opacity={0.15} side={THREE.DoubleSide} />
             </mesh>
+
+            <group position={pos}>
+                <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.2}>
+                    <mesh ref={meshRef}>
+                        <sphereGeometry args={[size, 64, 64]} />
+                        <meshStandardMaterial
+                            map={texture}
+                            color={texture ? '#ffffff' : color}
+                            roughness={0.5}
+                            metalness={0.1}
+                        />
+                        {rings && (
+                            <mesh rotation={[Math.PI / 2.5, 0, 0]}>
+                                <ringGeometry args={[size * 1.4, size * 2.8, 64]} />
+                                <meshStandardMaterial
+                                    map={ringTexture}
+                                    transparent
+                                    opacity={0.9}
+                                    side={THREE.DoubleSide}
+                                    color="#d2b48c"
+                                />
+                            </mesh>
+                        )}
+                    </mesh>
+                    <Text
+                        position={[0, size + 1.5, 0]}
+                        fontSize={0.8}
+                        color="#00f2ff"
+                        anchorX="center"
+                        anchorY="middle"
+                        outlineWidth={0.05}
+                        outlineColor="#000000"
+                    >
+                        {name.toUpperCase()}
+                    </Text>
+                    {hasMoon && <Moon date={date} />}
+                </Float>
+                {hasMoon && <MoonOrbit date={date} />}
+            </group>
         </group>
     );
 };
@@ -273,7 +359,8 @@ const CosmicTimeline = () => {
 
     const currentDate = useMemo(() => {
         const d = new Date(year, 0, 1);
-        d.setDate(dayOfYear);
+        // Using setTime with dayOfYear * msInDay for millisecond precision
+        d.setTime(d.getTime() + dayOfYear * 86400000);
         return d;
     }, [year, dayOfYear]);
 
@@ -312,7 +399,7 @@ const CosmicTimeline = () => {
                         </div>
                         <div className="mini-indicator glass-panel">
                             <Layers size={14} className="text-blue-400" />
-                            <span><SmartTerm term="ISS" /> TELEMETRY: LIVE</span>
+                            <span><SmartTerm term="Moon" /> TELEMETRY: LIVE</span>
                         </div>
                     </div>
                 </div>
@@ -365,14 +452,14 @@ const CosmicTimeline = () => {
                 <CanvasErrorBoundary>
                     <Canvas
                         shadows
-                        gl={{ alpha: false, antialias: true }}
+                        gl={{ antialias: true, toneMapping: THREE.ReinhardToneMapping, toneMappingExposure: 1.5 }}
                         camera={{ position: [0, 80, 150], fov: 45 }}
                     >
                         <color attach="background" args={['#000000']} />
                         <Suspense fallback={null}>
                             <SimulationHelper isAutoPlay={isAutoPlay} setDayOfYear={setDayOfYear} />
-                            <Stars radius={400} depth={80} count={30000} factor={8} saturation={0} fade speed={1.5} />
-                            <ambientLight intensity={0.3} />
+                            <Stars radius={400} depth={80} count={30000} factor={8} saturation={0} fade speed={0.5} />
+                            <ambientLight intensity={0.2} />
                             <Sun />
                             <AsteroidBelt />
 
@@ -392,6 +479,10 @@ const CosmicTimeline = () => {
                                 autoRotate={!isAutoPlay}
                                 autoRotateSpeed={0.2}
                             />
+
+                            <EffectComposer>
+                                <Bloom luminanceThreshold={0.5} luminanceSmoothing={0.9} height={300} intensity={1.5} />
+                            </EffectComposer>
                         </Suspense>
                     </Canvas>
                 </CanvasErrorBoundary>
